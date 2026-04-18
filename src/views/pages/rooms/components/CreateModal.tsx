@@ -11,6 +11,7 @@ function useCreateModalRoom() {
   const [roomName, setRoomName] = useState("");
   const [level, setLevel] = useState("1");
   const { createState, submitCreate, isCreatePending } = useRoomActions();
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const { confirm, DialogComponent, closeDialog, setIsLoading } =
     useConfirmDialogFixed({
@@ -56,8 +57,12 @@ function useCreateModalRoom() {
     });
 
   useEffect(() => {
+    (() => setIsSuccess(createState.success ?? false))();
+  }, [createState, setIsSuccess]);
+
+  useEffect(() => {
     setIsLoading(false);
-    if (createState.success === true && roomCode && roomName) {
+    if (isSuccess && roomCode && roomName) {
       const resetCreateFields = () => {
         setRoomCode("");
         setRoomName("");
@@ -70,15 +75,16 @@ function useCreateModalRoom() {
   }, [
     closeDialog,
     createState,
-    createState.success,
+    createState,
     roomCode,
     roomName,
-
+    isSuccess,
     setIsLoading,
   ]);
 
   const openCreateModal = async () => {
     setIsLoading(false);
+    setIsSuccess(false);
     await confirm({
       title: "Tambah Ruangan",
       confirmText: "Simpan",

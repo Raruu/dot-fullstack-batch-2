@@ -80,7 +80,7 @@ export function useEditModalRoom() {
         setIsSuccess(false);
       })();
     }
-  }, [closeDialog, editingId, setIsLoading, isSuccess]);
+  }, [closeDialog, editingId, setIsLoading, isSuccess, updateState]);
 
   const openEditModal = async (row: RoomListRow) => {
     setEditingId(row.id);
