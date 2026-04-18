@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/views/hooks/useTheme";
 import { AmbientBackground } from "@/views/components/ui/AmbientBackground";
+import { AuthClientProvider } from "@/views/providers/useAuthCient";
+import { env } from "@/libs/env";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,12 +29,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col">
-        <ThemeProvider>
-          <AmbientBackground>{children}</AmbientBackground>
-        </ThemeProvider>
+        <AuthClientProvider baseURL={env.PUBLIC_APP_URL}>
+          <ThemeProvider>
+            <AmbientBackground>{children}</AmbientBackground>
+          </ThemeProvider>
+        </AuthClientProvider>
       </body>
     </html>
   );

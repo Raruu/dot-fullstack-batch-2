@@ -12,18 +12,27 @@
     "@fluentui/react-icons": "^2.0.324",
     "@heroui/react": "^3.0.2",
     "@heroui/styles": "^3.0.2",
+    "@prisma/adapter-pg": "^7.7.0",
+    "@prisma/client": "^7.7.0",
+    "@t3-oss/env-nextjs": "^0.13.11",
+    "better-auth": "^1.6.5",
+    "dotenv": "^17.4.2",
     "motion": "^12.38.0",
     "next": "16.2.4",
+    "pg": "^8.20.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
+    "prisma": "^7.7.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

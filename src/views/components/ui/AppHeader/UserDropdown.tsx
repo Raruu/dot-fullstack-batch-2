@@ -10,17 +10,21 @@ import {
 } from "@heroui/react";
 import { SignOut24Regular } from "@fluentui/react-icons";
 import { motion } from "framer-motion";
+import { useAuthClient } from "@/views/providers/useAuthCient";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const { signOut, useSession } = useAuthClient();
 
-  const displayName = "";
-  const displayEmail = "-";
-  const displayPfp = "";
+  const user = useSession().data?.user;
+  const displayName = user?.name || "-";
+  const displayEmail = user?.email || "-";
+  const displayPfp = user?.image || "";
 
   async function handleSignOut() {
     setIsOpen(false);
+    await signOut();
     router.replace("/");
     router.refresh();
   }
