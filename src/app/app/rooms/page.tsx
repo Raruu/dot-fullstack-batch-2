@@ -3,6 +3,7 @@ import { getRoomListData } from "@/models/queries/rooms/get-room-list";
 import { RoomTable } from "@/views/pages/rooms/RoomTable";
 import { RoomListProvider } from "@/views/providers/rooms/RoomListProvider";
 import { createRoomAction } from "@/controllers/actions/rooms/create";
+import { updateRoomAction } from "@/controllers/actions/rooms/update";
 import { RoomActionsProvider } from "@/views/providers/rooms/RoomActions";
 
 interface Props {
@@ -28,6 +29,7 @@ export default async function Page({ searchParams }: Props) {
   });
 
   const bindedCreateClassAction = createRoomAction.bind(null, "/app/rooms");
+  const bindedUpdateRoomAction = updateRoomAction.bind(null, "/app/rooms");
 
   return (
     <div>
@@ -37,7 +39,10 @@ export default async function Page({ searchParams }: Props) {
       />
 
       <RoomListProvider data={data}>
-        <RoomActionsProvider createClassAction={bindedCreateClassAction}>
+        <RoomActionsProvider
+          createClassAction={bindedCreateClassAction}
+          updateRoomAction={bindedUpdateRoomAction}
+        >
           <div className="flex w-full flex-col gap-8">
             <RoomTable />
           </div>

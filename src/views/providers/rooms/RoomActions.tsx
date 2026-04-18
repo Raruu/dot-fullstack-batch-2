@@ -1,7 +1,14 @@
 "use client";
 
 import { UseConfirmDialogOptions } from "@/types/dialog";
-import { CreateRoomAction, CreateRoomState } from "@/types/rooms/rooms-actions";
+import {
+  CreateRoomAction,
+  CreateRoomState,
+  DeleteRoomAction,
+  DeleteRoomState,
+  UpdateRoomAction,
+  UpdateRoomState,
+} from "@/types/rooms/rooms-actions";
 import { useConfirmDialog } from "@/views/hooks/useConfirmDialog";
 import { useRouter } from "next/navigation";
 import {
@@ -19,22 +26,43 @@ interface Context {
   confirm: (opts: UseConfirmDialogOptions) => Promise<boolean>;
   DialogComponent: ReactNode;
   isCreatePending: boolean;
+  isUpdatePending: boolean;
+  isDeletePending: boolean;
   createState: CreateRoomState;
+  updateState: UpdateRoomState;
+  deleteState: DeleteRoomState;
   submitCreate: (payload: FormData) => void;
+  submitUpdateById: (payload: FormData) => void;
+  submitDeleteById: (payload: FormData) => void;
 }
 
 const Context = createContext<Context | null>(null);
 
 interface Props {
   children: ReactNode;
-  createClassAction: CreateRoomAction;
+  createClassAction?: CreateRoomAction;
+  updateRoomAction?: UpdateRoomAction;
+  deleteRoomAction?: DeleteRoomAction;
 }
 
-export function RoomActionsProvider({ children, createClassAction }: Props) {
+export function RoomActionsProvider({
+  children,
+  createClassAction,
+  updateRoomAction,
+  deleteRoomAction,
+}: Props) {
   const router = useRouter();
   const { confirm, DialogComponent } = useConfirmDialog();
   const [createState, dispatchCreate, isCreatePending] = useActionState(
-    createClassAction,
+    createClassAction!,
+    {},
+  );
+  const [updateState, dispatchUpdate, isUpdatePending] = useActionState(
+    updateRoomAction!,
+    {},
+  );
+  const [deleteState, dispatchDelete, isDeletePending] = useActionState(
+    deleteRoomAction!,
     {},
   );
 
@@ -45,6 +73,24 @@ export function RoomActionsProvider({ children, createClassAction }: Props) {
       });
     },
     [dispatchCreate],
+  );
+
+  const submitUpdateById = useCallback(
+    (formData: FormData) => {
+      startTransition(() => {
+        dispatchUpdate(formData);
+      });
+    },
+    [dispatchUpdate],
+  );
+
+  const submitDeleteById = useCallback(
+    (formData: FormData) => {
+      startTransition(() => {
+        dispatchDelete(formData);
+      });
+    },
+    [dispatchDelete],
   );
 
   const showSuccess = useCallback(
@@ -88,15 +134,50 @@ export function RoomActionsProvider({ children, createClassAction }: Props) {
     showSuccess,
   ]);
 
+  useEffect(() => {
+    if (typeof updateState.success !== "boolean") {
+      return;
+    }
+
+    showSuccess(updateState.success, updateState.message);
+  }, [showSuccess, updateState, updateState.message, updateState.success]);
+
+  useEffect(() => {
+    console.log(deleteState);
+    if (typeof deleteState.success !== "boolean") {
+      return;
+    }
+
+    showSuccess(deleteState.success, deleteState.message, "/app/rooms");
+  }, [deleteState, deleteState.message, deleteState.success, showSuccess]);
+
   const data = useMemo(
     () => ({
       confirm,
       DialogComponent,
       createState,
+      deleteState,
+      updateState,
       submitCreate,
+      submitDeleteById,
+      submitUpdateById,
       isCreatePending,
+      isDeletePending,
+      isUpdatePending,
     }),
-    [confirm, DialogComponent, createState, submitCreate, isCreatePending],
+    [
+      confirm,
+      DialogComponent,
+      createState,
+      deleteState,
+      isCreatePending,
+      isDeletePending,
+      isUpdatePending,
+      submitCreate,
+      submitDeleteById,
+      submitUpdateById,
+      updateState,
+    ],
   );
 
   return <Context.Provider value={data}>{children}</Context.Provider>;

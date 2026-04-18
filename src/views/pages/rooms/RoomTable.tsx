@@ -3,7 +3,6 @@
 import {
   Button,
   Card,
-  Link,
   Pagination,
   Select,
   SelectItem,
@@ -21,6 +20,8 @@ import { RoomFilter } from "./RoomFilter";
 import { useRoomList } from "@/views/providers/rooms/RoomListProvider";
 import { useRoomActions } from "@/views/providers/rooms/RoomActions";
 import { Eye20Regular, Pen20Regular } from "@fluentui/react-icons";
+import Link from "next/link";
+import { useEditModalRoom } from "./components/EditModal";
 
 export function RoomTable() {
   const {
@@ -32,6 +33,7 @@ export function RoomTable() {
   } = useRoomList();
 
   const { DialogComponent } = useRoomActions();
+  const { openEditModal, DialogComponent: EditModal } = useEditModalRoom();
 
   const classNames = useMemo(
     () => ({
@@ -96,6 +98,7 @@ export function RoomTable() {
   return (
     <Card className="bg-background/30 px-6 py-4 flex flex-col gap-4">
       {DialogComponent}
+      {EditModal}
       <RoomFilter />
 
       <Table
@@ -121,10 +124,15 @@ export function RoomTable() {
               <TableCell>{row.level}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
-                  <Tooltip content="Lihat" color="primary">
+                  <Tooltip
+                    content="Lihat"
+                    color="primary"
+                    showArrow
+                    placement="left"
+                  >
                     <Button
                       as={Link}
-                      href={`rooms/${row.id}`}
+                      href={`/app/rooms/${row.id}`}
                       size="sm"
                       variant="light"
                       color="primary"
@@ -133,9 +141,18 @@ export function RoomTable() {
                       <Eye20Regular />
                     </Button>
                   </Tooltip>
-
-                  <Tooltip content="Edit">
-                    <Button as={Link} size="sm" variant="light" isIconOnly>
+                  <Tooltip
+                    content="Edit"
+                    color="default"
+                    placement="right"
+                    showArrow
+                  >
+                    <Button
+                      size="sm"
+                      variant="light"
+                      isIconOnly
+                      onPress={() => openEditModal(row)}
+                    >
                       <Pen20Regular />
                     </Button>
                   </Tooltip>

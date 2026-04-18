@@ -20,3 +20,13 @@ export type CreateRoomAction = (
   prevState: CreateRoomState,
   formData: FormData,
 ) => Promise<CreateRoomState>;
+
+export type UpdateRoomAction = (
+  prevState: UpdateRoomState,
+  formData: FormData,
+) => Promise<UpdateRoomState>;
+
+export type DeleteRoomAction = (
+  prevState: DeleteRoomState,
+  formData: FormData,
+) => Promise<DeleteRoomState>;
