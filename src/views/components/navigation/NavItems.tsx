@@ -21,7 +21,7 @@ export const itemSidebarNav: SidebarNavSections = {
     {
       name: "Master",
       icon: <AppsList24Regular />,
-      subItems: [{ name: "User", path: "/user" }],
+      subItems: [{ name: "User", path: "/app/user" }],
     },
   ],
 };
