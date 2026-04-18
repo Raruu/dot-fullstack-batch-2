@@ -67,3 +67,44 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model Room {
+  id        Int        @id @default(autoincrement())
+  roomName  String
+  roomCode  String     @unique
+  level     Int
+  createdAt DateTime   @default(now())
+  schedules Schedule[]
+}
+
+model Schedule {
+  id              Int       @id @default(autoincrement())
+  roomId          Int
+  subject         String
+  startTimeSlotId Int
+  endTimeSlotId   Int
+  day             DayOfWeek
+  createdAt       DateTime  @default(now())
+  endTimeSlot     Timeslot  @relation("EndTime", fields: [endTimeSlotId], references: [id], onDelete: Cascade)
+  room            Room      @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  startTimeSlot   Timeslot  @relation("StartTime", fields: [startTimeSlotId], references: [id], onDelete: Cascade)
+}
+
+model Timeslot {
+  id             Int        @id @default(autoincrement())
+  slotNumber     Int
+  startTime      DateTime   @db.Time(6)
+  endTime        DateTime   @db.Time(6)
+  endSchedules   Schedule[] @relation("EndTime")
+  startSchedules Schedule[] @relation("StartTime")
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
