@@ -56,7 +56,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ navSections }) => {
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
               className={cn(
-                "group flex w-full cursor-pointer items-center gap-3 rounded-2xl px-3 py-2.5 text-left transition-colors duration-200 lg:justify-start",
+                "group flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors duration-200 lg:justify-start",
                 openSubmenu?.type === menuType && openSubmenu?.index === index
                   ? "sidebar-item-active"
                   : "sidebar-item-inactive",
@@ -90,7 +90,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ navSections }) => {
               <Link
                 href={nav.path}
                 className={cn(
-                  "group flex w-full items-center gap-3 rounded-2xl px-3 py-2.5 transition-colors duration-200",
+                  "group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 transition-colors duration-200",
                   isActive(nav.path)
                     ? "sidebar-item-active"
                     : "sidebar-item-inactive",
@@ -135,7 +135,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ navSections }) => {
                       <Link
                         href={subItem.path}
                         className={cn(
-                          "flex items-center gap-2 rounded-2xl px-3 py-3 text-sm transition-colors duration-200 font-semibold",
+                          "flex items-center gap-2 rounded-xl px-3 py-3 text-sm transition-colors duration-200 font-semibold",
                           subItemActive
                             ? "sidebar-item-active"
                             : "sidebar-subitem-inactive",
@@ -146,7 +146,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({ navSections }) => {
                           {subItem.new && (
                             <span
                               className={cn(
-                                "ml-auto rounded-2xl px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                                "ml-auto rounded-xl px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
                                 subItemActive
                                   ? "sidebar-badge-active"
                                   : "sidebar-badge-inactive",

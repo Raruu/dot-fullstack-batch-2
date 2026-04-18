@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Input, Label } from "@heroui/react";
+import { Input } from "@heroui/react";
 import { AuthFormTemplate } from "@/views/pages/auth/AuthFormTemplate";
 import { useRouter } from "next/navigation";
 import { useAuthClient } from "@/views/providers/useAuthCient";
@@ -50,47 +50,41 @@ export default function RegisterPage() {
       footerLinkHref="/login"
       footerLinkText="Masuk"
     >
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="name">Nama</Label>
-        <Input
-          placeholder="Masukkan nama lengkap Anda"
-          type="text"
-          autoComplete="name"
-          required
-          className="h-12"
-          variant="secondary"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-        />
-      </div>
+      <Input
+        label="Nama"
+        labelPlacement="outside"
+        placeholder="Masukkan nama lengkap Anda"
+        type="text"
+        autoComplete="name"
+        size="lg"
+        isRequired
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+      />
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          placeholder="Masukkan email Anda"
-          type="email"
-          autoComplete="email"
-          required
-          className="h-12"
-          variant="secondary"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-      </div>
+      <Input
+        label="Email"
+        labelPlacement="outside"
+        placeholder="Masukkan email Anda"
+        type="email"
+        autoComplete="email"
+        size="lg"
+        isRequired
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
 
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          placeholder="Buat kata sandi"
-          type="password"
-          autoComplete="new-password"
-          required
-          className="h-12"
-          variant="secondary"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </div>
+      <Input
+        label="Kata sandi"
+        labelPlacement="outside"
+        placeholder="Buat kata sandi"
+        type="password"
+        autoComplete="new-password"
+        size="lg"
+        isRequired
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
     </AuthFormTemplate>
   );
 }

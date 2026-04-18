@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Avatar,
-  AvatarFallback,
-  AvatarImage,
   Dropdown,
-  Label,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from "@heroui/react";
 import { SignOut24Regular } from "@fluentui/react-icons";
 import { motion } from "framer-motion";
@@ -16,11 +16,16 @@ export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const { signOut, useSession } = useAuthClient();
+  const { data: session } = useSession();
 
-  const user = useSession().data?.user;
-  const displayName = user?.name || "-";
-  const displayEmail = user?.email || "-";
-  const displayPfp = user?.image || "";
+  const displayName = session?.user?.name || "-";
+  const displayEmail = session?.user?.email || "-";
+  const displayPfp = session?.user?.image || "";
+
+  function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
+  }
 
   async function handleSignOut() {
     setIsOpen(false);
@@ -30,49 +35,48 @@ export default function UserDropdown() {
   }
 
   return (
-    <Dropdown isOpen={isOpen} onOpenChange={setIsOpen}>
-      <Dropdown.Trigger>
+    <Dropdown
+      isOpen={isOpen}
+      onOpenChange={setIsOpen}
+      placement="bottom-end"
+      classNames={{ content: "p-2" }}
+    >
+      <DropdownTrigger>
         <motion.div whileHover={{ scale: 0.9 }}>
-          <div className="flex items-center text-gray-700 cursor-pointer dark:text-gray-400">
-            <Avatar className="mr-3 h-11 w-11">
-              <AvatarImage src={displayPfp} alt="User" />
-              <AvatarFallback>-</AvatarFallback>
-            </Avatar>
-          </div>
-        </motion.div>
-      </Dropdown.Trigger>
-
-      <Dropdown.Popover>
-        <Dropdown.Menu>
-          <Dropdown.Item key="profile-summary">
-            <Label className="flex flex-row items-center">
-              <Avatar className="mr-3 h-11 w-11">
-                <AvatarImage src={displayPfp} alt="User" />
-                <AvatarFallback>-</AvatarFallback>
-              </Avatar>
-              <div>
-                <span className="block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                  {displayName}
-                </span>
-                <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-                  {displayEmail}
-                </span>
-              </div>
-            </Label>
-          </Dropdown.Item>
-
-          <Dropdown.Item
-            key="sign-out"
-            variant="danger"
-            className="h-10"
-            onPress={handleSignOut}
+          <button
+            onClick={toggleDropdown}
+            className="flex items-center text-gray-700 cursor-pointer dark:text-gray-400"
           >
-            <Label>
-              <SignOut24Regular /> Keluar
-            </Label>
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown.Popover>
+            <Avatar src={displayPfp} alt="User" className="mr-3 h-11 w-11" />
+          </button>
+        </motion.div>
+      </DropdownTrigger>
+
+      <DropdownMenu aria-label="User actions">
+        <DropdownItem key="profile-summary" showDivider>
+          <div className="flex flex-row items-center">
+            <Avatar src={displayPfp} alt="User" className="mr-3 h-11 w-11" />
+            <div>
+              <span className="block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
+                {displayName}
+              </span>
+              <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
+                {displayEmail}
+              </span>
+            </div>
+          </div>
+        </DropdownItem>
+
+        <DropdownItem
+          key="sign-out"
+          variant="solid"
+          color="danger"
+          className="h-10"
+          onPress={handleSignOut}
+        >
+          <SignOut24Regular /> Keluar
+        </DropdownItem>
+      </DropdownMenu>
     </Dropdown>
   );
 }

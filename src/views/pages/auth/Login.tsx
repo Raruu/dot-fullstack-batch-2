@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Checkbox, Input, Label } from "@heroui/react";
+import { Checkbox, Input } from "@heroui/react";
 import { useRouter } from "next/navigation";
 import { AuthFormTemplate } from "@/views/pages/auth/AuthFormTemplate";
 import { useAuthClient } from "@/views/providers/useAuthCient";
@@ -50,44 +50,32 @@ export default function LoginPage() {
       footerLinkHref="/register"
       footerLinkText="Daftar"
     >
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          placeholder="Masukkan email Anda"
-          type="email"
-          autoComplete="email"
-          className="h-12"
-          variant="secondary"
-          required
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
-      </div>
-      <div className="flex flex-col gap-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
-          placeholder="Masukkan kata sandi Anda"
-          type="password"
-          autoComplete="current-password"
-          className="h-12"
-          variant="secondary"
-          required
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </div>
+      <Input
+        label="Email"
+        labelPlacement="outside"
+        placeholder="Masukkan email Anda"
+        type="email"
+        autoComplete="email"
+        size="lg"
+        isRequired
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
 
-      <Checkbox
-        id="remember-me"
-        isSelected={rememberMe}
-        onChange={setRememberMe}
-      >
-        <Checkbox.Control>
-          <Checkbox.Indicator />
-        </Checkbox.Control>
-        <Checkbox.Content>
-          <Label htmlFor="remember-me">Ingat Saya</Label>
-        </Checkbox.Content>
+      <Input
+        label="Kata sandi"
+        labelPlacement="outside"
+        placeholder="Masukkan kata sandi Anda"
+        type="password"
+        autoComplete="current-password"
+        size="lg"
+        isRequired
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+      />
+
+      <Checkbox isSelected={rememberMe} onValueChange={setRememberMe}>
+        Ingat saya
       </Checkbox>
     </AuthFormTemplate>
   );

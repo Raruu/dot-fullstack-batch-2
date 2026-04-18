@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
-import { Button, Card, Spinner } from "@heroui/react";
+import { Button, Card, CardBody, CardHeader } from "@heroui/react";
 
 type AuthFormTemplateProps = {
   title: string;
@@ -33,17 +33,17 @@ export function AuthFormTemplate({
 }: AuthFormTemplateProps) {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4">
-      <Card className="w-full max-w-md border border-zinc-200 bg-background/70 dark:border-zinc-800 overflow-auto">
-        <Card.Header className="block px-8 pt-8 pb-0">
+      <Card className="w-full max-w-md border border-zinc-200 bg-background/30 dark:border-zinc-800 overflow-auto">
+        <CardHeader className="block px-8 pt-8 pb-0">
           <h1 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">
             {title}
           </h1>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             {description}
           </p>
-        </Card.Header>
+        </CardHeader>
 
-        <Card.Content className="px-8 py-6">
+        <CardBody className="px-8 py-6">
           <form
             onSubmit={(e) => onSubmit(e as unknown as SubmitEvent)}
             className="flex flex-col gap-4"
@@ -54,22 +54,17 @@ export function AuthFormTemplate({
 
             <Button
               type="submit"
-              isPending={loading}
-              variant="primary"
+              isLoading={loading}
+              color="primary"
               className="w-full"
               size="lg"
             >
-              {({ isPending }) => (
-                <>
-                  {isPending && <Spinner color="current" size="sm" />}
-                  {isPending ? loadingText : submitText}
-                </>
-              )}
+              {loading ? loadingText : submitText}
             </Button>
           </form>
 
           <p className="mt-6 text-sm text-zinc-600 dark:text-zinc-400">
-            {footerText}{" "}
+            {footerText}
             <Link
               href={footerLinkHref}
               className="font-medium text-zinc-900 hover:underline dark:text-zinc-100"
@@ -77,7 +72,7 @@ export function AuthFormTemplate({
               {footerLinkText}
             </Link>
           </p>
-        </Card.Content>
+        </CardBody>
       </Card>
     </div>
   );
