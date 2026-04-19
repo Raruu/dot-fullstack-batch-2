@@ -20,6 +20,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
 } from "react";
 import { useAuthClient } from "../useAuthCient";
 
@@ -137,6 +138,7 @@ export function UserActionsProvider({
 
   const { useSession } = useAuthClient();
   const user = useSession().data?.user;
+  const userRef = useRef(user);
 
   useEffect(() => {
     if (typeof updateState.success !== "boolean") {
@@ -144,19 +146,16 @@ export function UserActionsProvider({
     }
 
     showSuccess(updateState.success, updateState.message, () => {
-      if (user) {
-        if (updateState.success && updateState.updatedId === user.id) {
+      if (userRef.current) {
+        if (
+          updateState.success &&
+          updateState.updatedId === userRef.current.id
+        ) {
           window.location.reload();
         }
       }
     });
-  }, [
-    showSuccess,
-    updateState,
-    updateState.message,
-    updateState.success,
-    user,
-  ]);
+  }, [showSuccess, updateState]);
 
   useEffect(() => {
     if (typeof deleteState.success !== "boolean") {
