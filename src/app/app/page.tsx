@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="flex items-center justify-center  font-sans ">
-      <NavigationTitle title="Dashboard" subtitle="Mambo" />
+      <NavigationTitle title="Beranda" subtitle="Menu ada di kiri" />
       <main className="flex min-h-[75dvh] w-full max-w-3xl flex-col items-center justify-between py-32 px-16  sm:items-start">
         <Image
           className="dark:invert"
