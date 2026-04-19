@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { NextResponse } from "next/server";
 import { PROFILE_STORAGE_DIR } from "@/libs/config";
+import { getUnauthorizedIfNoSession } from "@/libs/auth-session";
 
 interface Props {
   params: Promise<{
@@ -10,6 +11,12 @@ interface Props {
 }
 
 export async function GET(_request: Request, { params }: Props) {
+  const unauthorizedResponse = await getUnauthorizedIfNoSession();
+
+  if (unauthorizedResponse !== true) {
+    return unauthorizedResponse;
+  }
+
   const { file } = await params;
   const fileName = path.basename(file);
 
