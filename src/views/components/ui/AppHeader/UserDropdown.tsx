@@ -53,7 +53,11 @@ export default function UserDropdown() {
       </DropdownTrigger>
 
       <DropdownMenu aria-label="User actions">
-        <DropdownItem key="profile-summary" showDivider>
+        <DropdownItem
+          key="profile-summary"
+          showDivider
+          onClick={() => router.push(`/app/user?search=${displayEmail}`)}
+        >
           <div className="flex flex-row items-center">
             <Avatar src={displayPfp} alt="User" className="mr-3 h-11 w-11" />
             <div>
