@@ -143,7 +143,6 @@ export function RoomActionsProvider({
   }, [showSuccess, updateState, updateState.message, updateState.success]);
 
   useEffect(() => {
-    console.log(deleteState);
     if (typeof deleteState.success !== "boolean") {
       return;
     }

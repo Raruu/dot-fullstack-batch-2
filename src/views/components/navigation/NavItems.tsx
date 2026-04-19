@@ -3,14 +3,14 @@ import { SidebarNavSections } from "@/types/nav-item";
 import {
   AppsList24Regular,
   CalendarLtr24Regular,
-  Grid24Regular,
+  Home24Regular,
 } from "@fluentui/react-icons";
 
 export const itemSidebarNav: SidebarNavSections = {
   menu: [
     {
-      icon: <Grid24Regular />,
-      name: "Dashboard",
+      icon: <Home24Regular />,
+      name: "Beranda",
       path: "/app",
     },
     {

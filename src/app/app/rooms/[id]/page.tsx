@@ -10,7 +10,7 @@ import { updateScheduleAction } from "@/controllers/actions/schedule/update";
 import { createScheduleAction } from "@/controllers/actions/schedule/create";
 import { deleteScheduleAction } from "@/controllers/actions/schedule/delete";
 import NotFound from "@/app/not-found";
-import LoadDetailProvider from "@/views/pages/rooms/detail/LoadDetailProvider";
+import LoadDetailActionSuccess from "@/views/pages/rooms/detail/LoadDetailProvider";
 import { ScheduleActionsProvider } from "@/views/providers/schedule/ScheduleActions";
 import { ScheduleEdit } from "@/views/pages/rooms/detail/ScheduleEdit";
 
@@ -57,6 +57,7 @@ export default async function Page({ params }: Props) {
         deleteRoomAction={bindedDeleteRoomAction}
         updateRoomAction={bindedUpdateRoomAction}
       >
+        <LoadDetailActionSuccess />
         {detail ? (
           <RoomDetailProvider detail={detail}>
             <div className="space-y-4">
@@ -77,7 +78,6 @@ export default async function Page({ params }: Props) {
               message="Data sudah tidak ada atau tidak pernah ada"
               backInstead
             />
-            <LoadDetailProvider />
           </>
         )}
       </RoomActionsProvider>

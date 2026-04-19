@@ -40,7 +40,7 @@ export default function LoginPage() {
   return (
     <AuthFormTemplate
       title="Masuk"
-      description="Masuk untuk melanjutkan ke dashboard Anda."
+      description="Masuk untuk melanjutkan ke aplikasi."
       onSubmit={(e) => handleSubmit(e as unknown as SubmitEvent)}
       loading={loading}
       submitText="Masuk"
