@@ -1,6 +1,6 @@
 "use client";
 
-import { RoomDetailData } from "@/models/queries/rooms/get-room-detail";
+import { RoomDetailData } from "@/types/rooms/rooms-detail";
 import { createContext, ReactNode, useContext } from "react";
 
 interface RoomDetailContextValue {

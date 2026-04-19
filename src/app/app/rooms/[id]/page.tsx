@@ -6,8 +6,13 @@ import { RoomDetailProvider } from "@/views/providers/rooms/RoomDetailProvider";
 import { RoomActionsProvider } from "@/views/providers/rooms/RoomActions";
 import { updateRoomAction } from "@/controllers/actions/rooms/update";
 import { deleteRoomAction } from "@/controllers/actions/rooms/delete";
+import { updateScheduleAction } from "@/controllers/actions/schedule/update";
+import { createScheduleAction } from "@/controllers/actions/schedule/create";
+import { deleteScheduleAction } from "@/controllers/actions/schedule/delete";
 import NotFound from "@/app/not-found";
 import LoadDetailProvider from "@/views/pages/rooms/detail/LoadDetailProvider";
+import { ScheduleActionsProvider } from "@/views/providers/schedule/ScheduleActions";
+import { ScheduleEdit } from "@/views/pages/rooms/detail/ScheduleEdit";
 
 interface Props {
   params: Promise<{
@@ -27,6 +32,18 @@ export default async function Page({ params }: Props) {
 
   const bindedUpdateRoomAction = updateRoomAction.bind(null, "/app/rooms");
   const bindedDeleteRoomAction = deleteRoomAction.bind(null, "/app/rooms");
+  const bindedUpdateScheduleAction = updateScheduleAction.bind(
+    null,
+    "/app/rooms",
+  );
+  const bindedCreateScheduleAction = createScheduleAction.bind(
+    null,
+    "/app/rooms",
+  );
+  const bindedDeleteScheduleAction = deleteScheduleAction.bind(
+    null,
+    "/app/rooms",
+  );
 
   return (
     <div className="space-y-6">
@@ -42,7 +59,16 @@ export default async function Page({ params }: Props) {
       >
         {detail ? (
           <RoomDetailProvider detail={detail}>
-            <RoomCard />
+            <div className="space-y-4">
+              <RoomCard />
+              <ScheduleActionsProvider
+                createScheduleAction={bindedCreateScheduleAction}
+                updateScheduleAction={bindedUpdateScheduleAction}
+                deleteScheduleAction={bindedDeleteScheduleAction}
+              >
+                <ScheduleEdit />
+              </ScheduleActionsProvider>
+            </div>
           </RoomDetailProvider>
         ) : (
           <>

@@ -27,12 +27,12 @@ export function RoomCard() {
           <h2 className="text-lg font-semibold">Informasi Ruangan</h2>
 
           <div className="flex flex-row items-center gap-3">
-            <Button color="danger" variant="flat" onPress={openDeleteModal}>
+            <Button color="danger" variant="solid" onPress={openDeleteModal}>
               <BinRecycleRegular /> Hapus
             </Button>
             <Button
               color="primary"
-              variant="flat"
+              variant="solid"
               onPress={() => openEditModal(detail)}
             >
               <PenRegular />

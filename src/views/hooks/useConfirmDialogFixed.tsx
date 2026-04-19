@@ -6,17 +6,22 @@ import {
   ModalBody,
   ModalFooter,
   Button,
+  cn,
 } from "@heroui/react";
 import type { ReactNode } from "react";
 import { useState, useCallback } from "react";
 
 interface Props {
   message: ReactNode | (() => ReactNode);
+  footer?: ReactNode | (() => ReactNode);
+  thirdButton?: ReactNode | (() => ReactNode);
   onConfirm?: (result: boolean) => boolean | void | Promise<boolean | void>;
 }
 
 export const useConfirmDialogFixed = ({
   message,
+  footer,
+  thirdButton,
   onConfirm: onSave,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,6 +68,9 @@ export const useConfirmDialogFixed = ({
   }, [closeDialog]);
 
   const content = typeof message === "function" ? message() : message;
+  const footerContent = typeof footer === "function" ? footer() : footer;
+  const footerThirdButton =
+    typeof thirdButton === "function" ? thirdButton() : thirdButton;
 
   const DialogComponent = (
     <Modal
@@ -76,25 +84,37 @@ export const useConfirmDialogFixed = ({
           {options.title}
         </ModalHeader>
         <ModalBody>{content}</ModalBody>
-        <ModalFooter>
-          {!options.noCancle && (
-            <Button
-              variant="light"
-              onPress={handleClose}
-              isDisabled={isLoading}
-            >
-              {options.cancelText || "Tidak"}
-            </Button>
-          )}
-
-          <Button
-            color={options.variant || "primary"}
-            onPress={handleSave}
-            isDisabled={options.disabled}
-            isLoading={isLoading}
+        <ModalFooter className="w-full">
+          {footer && footerContent}
+          <div
+            className={cn(
+              "flex flex-row items-center w-full",
+              thirdButton ? "justify-between" : "justify-end",
+            )}
           >
-            {options.confirmText || "Ya"}
-          </Button>
+            {thirdButton && footerThirdButton}
+            <div className="flex flex-row items-center gap-1">
+              {!options.noCancle && !footer && (
+                <Button
+                  variant="light"
+                  onPress={handleClose}
+                  isDisabled={isLoading}
+                >
+                  {options.cancelText || "Tidak"}
+                </Button>
+              )}
+              {!footer && (
+                <Button
+                  color={options.variant || "primary"}
+                  onPress={handleSave}
+                  isDisabled={options.disabled}
+                  isLoading={isLoading}
+                >
+                  {options.confirmText || "Ya"}
+                </Button>
+              )}
+            </div>
+          </div>
         </ModalFooter>
       </ModalContent>
     </Modal>
