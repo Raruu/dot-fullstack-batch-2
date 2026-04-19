@@ -1,4 +1,4 @@
-import { auth } from "@/libs/auth";
+import { auth } from "@/controllers/auth/auth";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 

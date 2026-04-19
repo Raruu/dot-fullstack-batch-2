@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUnauthorizedIfNoSession } from "@/libs/auth-session";
+import { getUnauthorizedIfNoSession } from "@/controllers/auth/auth-session";
 import { getRoomDetail } from "@/models/queries/rooms/get-room-detail";
 
 interface Props {

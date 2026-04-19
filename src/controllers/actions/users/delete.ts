@@ -1,7 +1,7 @@
 "use server";
 
 import { PROFILE_STORAGE_DIR } from "@/libs/config";
-import db from "@/libs/db";
+import db from "@/models/db";
 import { DeleteUserState } from "@/types/users/users-actions";
 import { revalidatePath } from "next/cache";
 import { unlink } from "node:fs/promises";

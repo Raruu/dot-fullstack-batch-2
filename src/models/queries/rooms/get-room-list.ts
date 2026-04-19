@@ -1,5 +1,5 @@
 import { PAGINATION_DEFAULT_PAGE_SIZE } from "@/libs/config";
-import db from "@/libs/db";
+import db from "@/models/db";
 import { parsePositiveInt } from "@/libs/utils";
 import { RoomListData, RoomListQueryInput } from "@/types/rooms/rooms-list";
 

@@ -1,5 +1,5 @@
-import { auth } from "@/libs/auth";
-import db from "@/libs/db";
+import { auth } from "@/controllers/auth/auth";
+import db from "@/models/db";
 
 const TIME_SLOT_DATA = [
   { number: 1, startTime: "07:00", endTime: "07:50" },

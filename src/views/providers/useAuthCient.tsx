@@ -1,6 +1,6 @@
 "use client";
 
-import { authClient } from "@/controllers/auth-client";
+import { authClient } from "@/controllers/auth/auth-client";
 import { AuthClient } from "@/types/auth";
 import { createContext, useContext, useMemo } from "react";
 

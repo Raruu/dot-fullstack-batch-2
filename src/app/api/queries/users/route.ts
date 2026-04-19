@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUnauthorizedIfNoSession } from "@/libs/auth-session";
+import { getUnauthorizedIfNoSession } from "@/controllers/auth/auth-session";
 import { getUserListData } from "@/models/queries/users/get-user-list";
 import { UserListQueryInput } from "@/types/users/users-list";
 

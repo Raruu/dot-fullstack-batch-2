@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
-import { env } from "./env";
+import { env } from "../../libs/env";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import db from "./db";
+import db from "../../models/db";
 import { openAPI } from "better-auth/plugins";
 
 export const auth = betterAuth({

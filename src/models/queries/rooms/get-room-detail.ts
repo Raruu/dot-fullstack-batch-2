@@ -1,4 +1,4 @@
-import db from "@/libs/db";
+import db from "@/models/db";
 import { RoomDetailData } from "@/types/rooms/rooms-detail";
 import { RoomScheduleDay } from "@/types/schedule";
 

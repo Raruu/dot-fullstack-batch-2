@@ -1,6 +1,6 @@
 "use server";
 
-import db from "@/libs/db";
+import db from "@/models/db";
 import { DeleteRoomState } from "@/types/rooms/rooms-actions";
 import { revalidatePath } from "next/cache";
 

@@ -1,6 +1,6 @@
 "use server";
 
-import db from "@/libs/db";
+import db from "@/models/db";
 import { DeleteScheduleState } from "@/types/schedules/schedules-actions";
 import { revalidatePath } from "next/cache";
 

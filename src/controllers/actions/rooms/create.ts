@@ -1,6 +1,6 @@
 "use server";
 
-import db from "@/libs/db";
+import db from "@/models/db";
 import { CreateRoomState } from "@/types/rooms/rooms-actions";
 import { createRoomSchema } from "@/models/validations/rooms/create-room-schema";
 import { revalidatePath } from "next/cache";

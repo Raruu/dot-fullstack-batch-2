@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUnauthorizedIfNoSession } from "@/libs/auth-session";
+import { getUnauthorizedIfNoSession } from "@/controllers/auth/auth-session";
 import { JsonValue, ActionHandler } from "@/types/api-actions";
 
 function appendFormValue(formData: FormData, key: string, value: JsonValue) {

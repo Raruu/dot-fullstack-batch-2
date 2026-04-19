@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@/libs/auth";
-import db from "@/libs/db";
+import { auth } from "@/controllers/auth/auth";
+import db from "@/models/db";
 import { updateUserSchema } from "@/models/validations/users/update-user-schema";
 import { UpdateUserState } from "@/types/users/users-actions";
 import { revalidatePath } from "next/cache";

@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { NextResponse } from "next/server";
 import { PROFILE_STORAGE_DIR } from "@/libs/config";
-import { getUnauthorizedIfNoSession } from "@/libs/auth-session";
+import { getUnauthorizedIfNoSession } from "@/controllers/auth/auth-session";
 
 interface Props {
   params: Promise<{
