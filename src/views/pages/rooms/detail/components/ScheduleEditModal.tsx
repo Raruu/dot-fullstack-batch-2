@@ -244,5 +244,6 @@ export function useScheduleEditModal() {
       </>
     ),
     openEditModal,
+    openDeleteModal,
   };
 }
