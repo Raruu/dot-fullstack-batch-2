@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@/libs/auth";
 import db from "@/libs/db";
 import { createUserSchema } from "@/models/validations/users/create-user-schema";
 import { CreateUserState } from "@/types/users/users-actions";
@@ -16,6 +17,8 @@ export async function createUserAction(
     name: formData.get("name"),
     email: formData.get("email"),
     emailVerified: String(formData.get("emailVerified")) === "true",
+    password: formData.get("password"),
+    confirmPassword: formData.get("confirmPassword"),
   });
 
   if (!parsed.success) {
@@ -36,11 +39,32 @@ export async function createUserAction(
       imagePath = await saveProfileImage(imageFile);
     }
 
-    const user = await db.user.create({
-      data: {
-        id: crypto.randomUUID(),
+    await auth.api.signUpEmail({
+      body: {
         name: parsed.data.name,
         email: parsed.data.email,
+        password: parsed.data.password,
+      },
+    });
+
+    const user = await db.user.findUnique({
+      where: {
+        email: parsed.data.email,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error("Akun user gagal dibuat.");
+    }
+
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
         image: imagePath,
         emailVerified: parsed.data.emailVerified,
       },
@@ -58,7 +82,8 @@ export async function createUserAction(
     const errorMessage = error instanceof Error ? error.message : "";
     const isEmailConflict =
       error instanceof Error &&
-      error.message.toLowerCase().includes("unique") &&
+      (error.message.toLowerCase().includes("unique") ||
+        error.message.toLowerCase().includes("already")) &&
       error.message.toLowerCase().includes("email");
     const isUploadError =
       errorMessage.includes("File harus berupa gambar") ||

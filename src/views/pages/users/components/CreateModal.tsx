@@ -11,6 +11,8 @@ function useCreateModalUser() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [emailVerified, setEmailVerified] = useState(false);
@@ -52,6 +54,24 @@ function useCreateModalUser() {
             isInvalid={!!createState.errors?.email}
             errorMessage={createState.errors?.email?.join(", ")}
           />
+          <Input
+            label="Password"
+            type="password"
+            value={password}
+            onValueChange={setPassword}
+            isRequired
+            isInvalid={!!createState.errors?.password}
+            errorMessage={createState.errors?.password?.join(", ")}
+          />
+          <Input
+            label="Konfirmasi Password"
+            type="password"
+            value={confirmPassword}
+            onValueChange={setConfirmPassword}
+            isRequired
+            isInvalid={!!createState.errors?.confirmPassword}
+            errorMessage={createState.errors?.confirmPassword?.join(", ")}
+          />
           <div className="flex flex-row items-center justify-between px-2">
             <p className="text-md ">Email Terverifikasi</p>
             <Switch
@@ -68,6 +88,8 @@ function useCreateModalUser() {
         const formData = new FormData();
         formData.set("name", name);
         formData.set("email", email);
+        formData.set("password", password);
+        formData.set("confirmPassword", confirmPassword);
         if (imageFile) {
           formData.set("imageFile", imageFile);
         }
@@ -91,10 +113,12 @@ function useCreateModalUser() {
 
   useEffect(() => {
     setIsLoading(false);
-    if (isSuccess && name && email) {
+    if (isSuccess && name && email && password && confirmPassword) {
       (() => {
         setName("");
         setEmail("");
+        setPassword("");
+        setConfirmPassword("");
         setImageFile(null);
         if (imagePreviewRef.current?.startsWith("blob:")) {
           URL.revokeObjectURL(imagePreviewRef.current);
@@ -105,7 +129,16 @@ function useCreateModalUser() {
         closeDialog(true);
       })();
     }
-  }, [closeDialog, createState, email, isSuccess, name, setIsLoading]);
+  }, [
+    closeDialog,
+    confirmPassword,
+    createState,
+    email,
+    isSuccess,
+    name,
+    password,
+    setIsLoading,
+  ]);
 
   const openCreateModal = async () => {
     setIsLoading(false);

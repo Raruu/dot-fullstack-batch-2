@@ -1,5 +1,6 @@
 "use server";
 
+import { auth } from "@/libs/auth";
 import db from "@/libs/db";
 import { updateUserSchema } from "@/models/validations/users/update-user-schema";
 import { UpdateUserState } from "@/types/users/users-actions";
@@ -17,6 +18,8 @@ export async function updateUserAction(
     name: formData.get("name"),
     email: formData.get("email"),
     emailVerified: String(formData.get("emailVerified")) === "true",
+    newPassword: formData.get("newPassword") ?? "",
+    confirmPassword: formData.get("confirmPassword") ?? "",
   });
 
   if (!parsed.success) {
@@ -50,6 +53,28 @@ export async function updateUserAction(
       },
     });
 
+    const newPassword = (parsed.data.newPassword ?? "").trim();
+
+    if (newPassword) {
+      const token = crypto.randomUUID().replace(/-/g, "");
+
+      await db.verification.create({
+        data: {
+          id: crypto.randomUUID(),
+          identifier: `reset-password:${token}`,
+          value: parsed.data.id,
+          expiresAt: new Date(Date.now() + 60 * 1000),
+        },
+      });
+
+      await auth.api.resetPassword({
+        body: {
+          token,
+          newPassword,
+        },
+      });
+    }
+
     revalidatePath(revalidateTarget);
     revalidatePath(`${revalidateTarget}/${parsed.data.id}`);
 
@@ -76,22 +101,24 @@ export async function updateUserAction(
         ? errorMessage
         : "Gagal memperbarui user.";
 
-    const errorConflict = {
-      email: [message],
-    };
+    const lowerMessage = message.toLowerCase();
 
-    const errorUpload = {
-      imageFile: [message],
-    };
+    let errors = {};
+    if (isEmailConflict || lowerMessage.includes("email")) {
+      errors = { email: [message] };
+    } else if (isUploadError) {
+      errors = { imageFile: [message] };
+    } else if (
+      lowerMessage.includes("password") ||
+      lowerMessage.includes("token")
+    ) {
+      errors = { newPassword: [message] };
+    }
 
     return {
       success: false,
       message,
-      errors: isEmailConflict
-        ? errorConflict
-        : isUploadError
-          ? errorUpload
-          : {},
+      errors,
     };
   }
 }

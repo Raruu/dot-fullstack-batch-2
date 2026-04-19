@@ -12,6 +12,8 @@ export function useEditModalUser() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [emailVerified, setEmailVerified] = useState(false);
@@ -61,6 +63,23 @@ export function useEditModalUser() {
             isInvalid={!!updateState.errors?.email}
             errorMessage={updateState.errors?.email?.join(", ")}
           />
+          <Input
+            label="Password Baru"
+            type="password"
+            value={newPassword}
+            onValueChange={setNewPassword}
+            isInvalid={!!updateState.errors?.newPassword}
+            errorMessage={updateState.errors?.newPassword?.join(", ")}
+            description="Kosongkan jika tidak ingin reset password"
+          />
+          <Input
+            label="Konfirmasi Password Baru"
+            type="password"
+            value={confirmPassword}
+            onValueChange={setConfirmPassword}
+            isInvalid={!!updateState.errors?.confirmPassword}
+            errorMessage={updateState.errors?.confirmPassword?.join(", ")}
+          />
           <div className="flex flex-row items-center justify-between px-2">
             <p className="text-md ">Email Terverifikasi</p>
             <Switch
@@ -87,6 +106,8 @@ export function useEditModalUser() {
           formData.set("imageFile", imageFile);
         }
         formData.set("emailVerified", emailVerified ? "true" : "false");
+        formData.set("newPassword", newPassword);
+        formData.set("confirmPassword", confirmPassword);
         submitUpdateById(formData);
         return false;
       },
@@ -123,6 +144,8 @@ export function useEditModalUser() {
     setImageFile(null);
     setImage(row.image ?? null);
     setEmailVerified(row.emailVerified);
+    setNewPassword("");
+    setConfirmPassword("");
     setIsSuccess(false);
     setIsLoading(false);
 

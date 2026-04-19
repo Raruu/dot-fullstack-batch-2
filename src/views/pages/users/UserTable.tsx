@@ -116,7 +116,7 @@ export function UserTable() {
           <TableColumn>NAMA</TableColumn>
           <TableColumn>EMAIL</TableColumn>
           <TableColumn width="15%">STATUS</TableColumn>
-          <TableColumn width="15%">AKSI</TableColumn>
+          <TableColumn width="5%">AKSI</TableColumn>
         </TableHeader>
         <TableBody
           emptyContent="Data tidak ditemukan."
