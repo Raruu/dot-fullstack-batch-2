@@ -50,7 +50,6 @@ export async function runActionRequest(
   req: NestRequest,
   res: NestResponse,
   action: ActionFn,
-  defaultRevalidateTarget: string,
   fallbackMessage: string,
   files: UploadedFile[] = [],
 ) {
@@ -61,15 +60,9 @@ export async function runActionRequest(
   try {
     const body = req.body && typeof req.body === 'object' ? req.body : {};
     const formData = toFormData(body as Record<string, unknown>, files);
-    const target = String(
-      formData.get('revalidateTarget') ?? defaultRevalidateTarget,
-    ).trim();
+    const target = String(formData.get('revalidateTarget')).trim();
 
-    const result = await action(
-      target || defaultRevalidateTarget,
-      {},
-      formData,
-    );
+    const result = await action(target, {}, formData);
 
     res.status(result.success ? 200 : 400).json(result);
   } catch {

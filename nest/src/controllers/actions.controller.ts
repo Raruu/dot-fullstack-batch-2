@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -38,7 +39,6 @@ export class ApiActionsController {
       req,
       res,
       createRoomAction as ActionFn,
-      '/app/rooms',
       'Failed to create room.',
     );
   }
@@ -53,7 +53,6 @@ export class ApiActionsController {
       req,
       res,
       updateRoomAction as ActionFn,
-      '/app/rooms',
       'Failed to update room.',
     );
   }
@@ -68,7 +67,6 @@ export class ApiActionsController {
       req,
       res,
       deleteRoomAction as ActionFn,
-      '/app/rooms',
       'Failed to delete room.',
     );
   }
@@ -83,7 +81,6 @@ export class ApiActionsController {
       req,
       res,
       createScheduleAction as ActionFn,
-      '/app/rooms',
       'Failed to create schedule.',
     );
   }
@@ -98,7 +95,6 @@ export class ApiActionsController {
       req,
       res,
       updateScheduleAction as ActionFn,
-      '/app/rooms',
       'Failed to update schedule.',
     );
   }
@@ -113,7 +109,6 @@ export class ApiActionsController {
       req,
       res,
       deleteScheduleAction as ActionFn,
-      '/app/rooms',
       'Failed to delete schedule.',
     );
   }
@@ -132,7 +127,6 @@ export class ApiActionsController {
       req,
       res,
       createUserAction as ActionFn,
-      '/app/user',
       'Failed to create user.',
       files,
     );
@@ -152,7 +146,6 @@ export class ApiActionsController {
       req,
       res,
       updateUserAction as ActionFn,
-      '/app/user',
       'Failed to update user.',
       files,
     );
@@ -168,7 +161,6 @@ export class ApiActionsController {
       req,
       res,
       deleteUserAction as ActionFn,
-      '/app/user',
       'Failed to delete user.',
     );
   }
