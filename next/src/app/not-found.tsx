@@ -1,5 +1,5 @@
 "use client";
-import { Encounter } from "@/views/components/KeiAoraineoekaki/Encounter";
+import { Encounter } from "@/components/KeiAoraineoekaki/Encounter";
 import { Tooltip } from "@heroui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";

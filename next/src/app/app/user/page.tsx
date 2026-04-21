@@ -1,10 +1,10 @@
-import { NavigationTitle } from "@/views/components/ui/NavigationTitle";
+import { NavigationTitle } from "@/components/ui/NavigationTitle";
 import { getUserListData } from "@/models/queries/users/get-user-list";
-import { UserTable } from "@/views/pages/users/UserTable";
-import { UserListProvider } from "@/views/providers/users/UserListProvider";
+import { UserTable } from "@/views/users/UserTable";
+import { UserListProvider } from "@/providers/users/UserListProvider";
 import { createUserAction } from "@/controllers/actions/users/create";
 import { updateUserAction } from "@/controllers/actions/users/update";
-import { UserActionsProvider } from "@/views/providers/users/UserActions";
+import { UserActionsProvider } from "@/providers/users/UserActions";
 import { deleteUserAction } from "@/controllers/actions/users/delete";
 
 interface Props {

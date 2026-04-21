@@ -1,4 +1,4 @@
-import { NavigationTitle } from "@/views/components/ui/NavigationTitle";
+import { NavigationTitle } from "@/components/ui/NavigationTitle";
 import Image from "next/image";
 
 export default function Home() {

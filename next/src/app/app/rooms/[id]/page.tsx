@@ -1,18 +1,18 @@
 import { notFound } from "next/navigation";
-import { NavigationTitle } from "@/views/components/ui/NavigationTitle";
+import { NavigationTitle } from "@/components/ui/NavigationTitle";
 import { getRoomDetail } from "@/models/queries/rooms/get-room-detail";
-import { RoomCard } from "@/views/pages/rooms/detail/RoomCard";
-import { RoomDetailProvider } from "@/views/providers/rooms/RoomDetailProvider";
-import { RoomActionsProvider } from "@/views/providers/rooms/RoomActions";
+import { RoomCard } from "@/views/rooms/detail/RoomCard";
+import { RoomDetailProvider } from "@/providers/rooms/RoomDetailProvider";
+import { RoomActionsProvider } from "@/providers/rooms/RoomActions";
 import { updateRoomAction } from "@/controllers/actions/rooms/update";
 import { deleteRoomAction } from "@/controllers/actions/rooms/delete";
 import { updateScheduleAction } from "@/controllers/actions/schedule/update";
 import { createScheduleAction } from "@/controllers/actions/schedule/create";
 import { deleteScheduleAction } from "@/controllers/actions/schedule/delete";
 import NotFound from "@/app/not-found";
-import LoadDetailActionSuccess from "@/views/pages/rooms/detail/LoadDetailProvider";
-import { ScheduleActionsProvider } from "@/views/providers/schedule/ScheduleActions";
-import { ScheduleEdit } from "@/views/pages/rooms/detail/ScheduleEdit";
+import LoadDetailActionSuccess from "@/views/rooms/detail/LoadDetailProvider";
+import { ScheduleActionsProvider } from "@/providers/schedule/ScheduleActions";
+import { ScheduleEdit } from "@/views/rooms/detail/ScheduleEdit";
 
 interface Props {
   params: Promise<{

@@ -1,8 +1,8 @@
-import AppSidebar from "@/views/components/ui/AppSidebar";
-import Backdrop from "@/views/components/ui/AppSidebar/Backdrop";
-import { SidebarProvider } from "@/views/hooks/useNavigation";
-import Display from "../../views/components/ui/Display";
-import { itemSidebarNav } from "../../views/components/navigation/NavItems";
+import AppSidebar from "@/components/ui/AppSidebar";
+import Backdrop from "@/components/ui/AppSidebar/Backdrop";
+import { SidebarProvider } from "@/hooks/useNavigation";
+import Display from "../../components/ui/Display";
+import { itemSidebarNav } from "../../components/navigation/NavItems";
 
 export default async function AppLayout({
   children,

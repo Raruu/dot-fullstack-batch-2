@@ -1,10 +1,10 @@
-import { NavigationTitle } from "@/views/components/ui/NavigationTitle";
+import { NavigationTitle } from "@/components/ui/NavigationTitle";
 import { getRoomListData } from "@/models/queries/rooms/get-room-list";
-import { RoomTable } from "@/views/pages/rooms/RoomTable";
-import { RoomListProvider } from "@/views/providers/rooms/RoomListProvider";
+import { RoomTable } from "@/views/rooms/RoomTable";
+import { RoomListProvider } from "@/providers/rooms/RoomListProvider";
 import { createRoomAction } from "@/controllers/actions/rooms/create";
 import { updateRoomAction } from "@/controllers/actions/rooms/update";
-import { RoomActionsProvider } from "@/views/providers/rooms/RoomActions";
+import { RoomActionsProvider } from "@/providers/rooms/RoomActions";
 
 interface Props {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
