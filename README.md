@@ -1,248 +1,98 @@
-# dot-fullstack-batch-2 - Challenge Fullstack (Typescript)
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
-## A. Penjelasan Project
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-Web simple untuk penjadwalan agenda pada ruangan.
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## B. Desain Database
+## Description
 
-![db design](./blob/db-full.webp)
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-Keterangan:
-
-- `User`, `Session`, `Account`, dan `Verification` adalah bawaan dari betterAuth.
-- 1 `Room` dapat memiliki banyak atau tidak mempuyai `Schedule`.
-- Setiap `Schedule` memiliki dua kolom referensi yang mengarah ke `Timeslot`.
-
-## C. Screenshot Aplikasi
-
-<details>
-  <summary><strong>Auth</strong></summary>
-
-| Halaman  | Gambar                              |
-| :------- | :---------------------------------- |
-| Login    | ![login](./blob/ss/login.png)       |
-| Register | ![register](./blob/ss/register.png) |
-
-</details>
-
-<details>
-  <summary><strong>Home</strong></summary>
-
-| Halaman | Gambar                      |
-| :------ | :-------------------------- |
-| Home    | ![home](./blob/ss/home.png) |
-
-</details>
-
-<details>
-  <summary><strong>Room (Ruangan)</strong></summary>
-
-| Halaman                      | Gambar                                                                  |
-| :--------------------------- | :---------------------------------------------------------------------- |
-| List Ruangan                 | ![ruangan-list](./blob/ss/ruangan-list.png)                             |
-| Detail Ruangan               | ![ruangan-detail](./blob/ss/ruangan-detail.png)                         |
-| Edit Ruangan                 | ![ruangan-edit](./blob/ss/ruangan-edit.png)                             |
-| Delete Ruangan               | ![ruangan-del](./blob/ss/ruangan-del.png)                               |
-| List Agenda Detail (Ruangan) | ![ruangan-detail-agenda-list](./blob/ss/ruangan-detail-agenda-list.png) |
-
-</details>
-
-<details>
-  <summary><strong>User</strong></summary>
-
-| Halaman     | Gambar                                    |
-| :---------- | :---------------------------------------- |
-| List User   | ![user-list](./blob/ss/user-list.png)     |
-| Create User | ![user-create](./blob/ss/user-create.png) |
-| Edit User   | ![user-edit](./blob/ss/user-edit.png)     |
-| Delete User | ![user-delete](./blob/ss/user-delete.png) |
-
-</details>
-
-<details>
-  <summary><strong>Agenda (Schedule)</strong></summary>
-
-| Halaman       | Gambar                                        |
-| :------------ | :-------------------------------------------- |
-| Add Agenda    | ![agenda-add](./blob/ss/agenda-add.png)       |
-| Delete Agenda | ![agenda-delete](./blob/ss/agenda-delete.png) |
-
-</details>
-
-<details>
-  <summary><strong>Bonus</strong></summary>
-
-Light Mode <br>
-![bonus-light-mode](./blob/ss/bonus-light-mode.png)
-
-</details>
-
-## D. Dependencies
-
-<details>
-  <summary><strong>Detail Dependencies (package.json)</strong></summary>
-
-| Package                 | Version    |
-| :---------------------- | :--------- |
-| `@fluentui/react-icons` | `^2.0.324` |
-| `@heroui/react`         | `^2.8.10`  |
-| `@prisma/adapter-pg`    | `^7.7.0`   |
-| `@prisma/client`        | `^7.7.0`   |
-| `@t3-oss/env-nextjs`    | `^0.13.11` |
-| `better-auth`           | `^1.6.5`   |
-| `dotenv`                | `^17.4.2`  |
-| `motion`                | `^12.38.0` |
-| `next`                  | `16.2.4`   |
-| `pg`                    | `^8.20.0`  |
-| `react`                 | `19.2.4`   |
-| `react-dom`             | `19.2.4`   |
-| `react-easy-crop`       | `^5.5.7`   |
-| `sharp`                 | `^0.34.5`  |
-| `zod`                   | `^4.3.6`   |
-
-### Dev Dependencies
-
-| Package                | Version   |
-| :--------------------- | :-------- |
-| `@tailwindcss/postcss` | `^4`      |
-| `@types/node`          | `^20`     |
-| `@types/pg`            | `^8.20.0` |
-| `@types/react`         | `^19`     |
-| `@types/react-dom`     | `^19`     |
-| `eslint`               | `^9`      |
-| `eslint-config-next`   | `16.2.4`  |
-| `prisma`               | `^7.7.0`  |
-| `tailwindcss`          | `^4`      |
-| `typescript`           | `^5`      |
-
-</details>
-
-### Stack Teknologi dan Ringkasan Dependencies
-
-| Kategori           | Teknologi                                                                                                          | Versi                     |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------------- |
-| **Authentication** | [Better Auth](https://better-auth.com/)                                                                            | ^1.6.5                    |
-| **Code Quality**   | [ESLint](https://eslint.org/)                                                                                      | ^9                        |
-| **Database**       | Supabase (PostgreSQL)                                                                                              | ^8.20.0                   |
-| **Framework**      | [Next.js](https://nextjs.org/)                                                                                     | 16.2.4                    |
-| **Icons**          | [@fluentui/react-icons](https://storybooks.fluentui.dev/react/?path=/docs/fluent-system-icons-icons-catalog--docs) | ^2.0.324                  |
-| **Language**       | [TypeScript](https://www.typescriptlang.org/)                                                                      | ^5                        |
-| **Media / Image**  | [Sharp](https://sharp.pixelplumbing.com/)<br>react-easy-crop                                                       | ^0.34.5<br>^5.5.7         |
-| **ORM**            | [Prisma](https://www.prisma.io/)                                                                                   | ^7.7.0                    |
-| **UI Library**     | [HeroUI v2](https://v2.heroui.com/)<br>[Motion](https://motion.dev/)<br>[Tailwind CSS](https://tailwindcss.com/)   | ^2.8.10<br>^12.38.0<br>^4 |
-| **Validation**     | [Zod](https://zod.dev/)<br>[@t3-oss/env-nextjs](https://env.t3.gg/)                                                | ^4.3.6<br>^0.13.11        |
-
-## E. Informasi untuk Developer Selanjutnya
-
-- Lihat dokumentasi pada `Dependencies` yang digunakan.
-- Secara aplikasi internal menggunakan server action tetapi tetap tersedia [Api Endpoint](#api-endpoint-yang-tersedia) yang dapat digunakan
-- Pahami [Struktur](#struktur-folder) folder yang ada dan pertahankan (Kalo suka MVC).
-
-### API Endpoint yang tersedia
-
-| Method   | Endpoint                 | Keterangan                                                                  | Auth |
-| :------- | :----------------------- | :-------------------------------------------------------------------------- | :--: |
-| `*`      | `/api/auth/*`            | Endpoint bawaan Better Auth. Lihat dokumentasinya pada `api/auth/reference` |  No  |
-| `GET`    | `/api/queries/rooms`     | Ambil daftar ruangan (query: `floor`, `search`, `page`, `pageSize`)         | Yes  |
-| `GET`    | `/api/queries/rooms/:id` | Ambil detail ruangan berdasarkan `id`                                       | Yes  |
-| `POST`   | `/api/actions/rooms`     | Tambah ruangan                                                              | Yes  |
-| `PUT`    | `/api/actions/rooms`     | Ubah data ruangan                                                           | Yes  |
-| `DELETE` | `/api/actions/rooms`     | Hapus ruangan                                                               | Yes  |
-| `POST`   | `/api/actions/schedule`  | Tambah agenda/schedule                                                      | Yes  |
-| `PUT`    | `/api/actions/schedule`  | Ubah agenda/schedule                                                        | Yes  |
-| `DELETE` | `/api/actions/schedule`  | Hapus agenda/schedule                                                       | Yes  |
-| `GET`    | `/api/queries/users`     | Ambil daftar user (query: `status`, `search`, `page`, `pageSize`)           | Yes  |
-| `POST`   | `/api/actions/users`     | Tambah user + buat akun credential (email/password)                         | Yes  |
-| `PUT`    | `/api/actions/users`     | Ubah data user (opsional reset password jika field password diisi)          | Yes  |
-| `DELETE` | `/api/actions/users`     | Hapus user                                                                  | Yes  |
-| `GET`    | `/api/serve/pfp/:file`   | Ambil file foto profil `.webp` dari storage                                 | Yes  |
-
-Keterangan:
-
-- Endpoint dengan `Auth: Yes` membutuhkan session login yang valid.
-- Untuk endpoint `actions/*`, payload bisa dikirim sebagai `application/json`, `multipart/form-data`, atau `application/x-www-form-urlencoded`.
-
-## Struktur Folder
-
-```
-dot-fullstack-batch-2/
-├── prisma/
-│   ├── schema.prisma          # Database schema
-│   ├── seed.ts                # Database seeder
-│   └── migrations/            # Database migrations
-├── src/
-│   ├── app/                   # Next.js App Router (Routing, Layouts, & API)
-│   ├── views/
-│   │   ├── components/        # Shared React components
-│   │   ├── pages/             # View/pages routes
-│   │   ├── hooks/             # React hooks
-│   │   └── providers/         # Context providers
-│   ├── controllers/           # Server actions
-│   │   ├── auth/              # Authentication logic & actions
-│   │   └── actions/           # Actions
-│   ├── models/                # Data layer
-│   │   ├── generated/         # Prisma generated
-│   │   ├── queries/           # Data fetching
-│   │   ├── validations/       # Validation schemas
-│   │   └── db.ts              # Database connection
-│   ├── libs/                  # Shared libraries
-│   ├── types/                 # TypeScript type definitions
-│   └── proxy.ts               # Proxy configuration
-├── public/                    # Static assets
-└── storage/                   # Storage folder
-```
-
-## Setup
-
-### Prerequisites
-
-1. **Node.js** v18+
-2. **PostgreSQL** database instance
-3. **pnpm/npm** package manager
-
-### Installation
+## Project setup
 
 ```bash
-npm install
+$ npm install
 ```
 
-### Environment Variables
-
-Buat file `.env` di root dari project:
-
-```env
-DATABASE_URL=
-
-PUBLIC_APP_URL=http://localhost:3000
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-BETTER_AUTH_SECRET=
-BETTER_AUTH_URL=http://localhost:3000
-```
-
-### Setup DB Windows
+## Compile and run the project
 
 ```bash
-npx prisma migrate reset; npx prisma db push; npx prisma generate; npx prisma db seed
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
 
-### Setup DB Linux
+## Run tests
 
 ```bash
-npx prisma migrate reset && npx prisma db push && npx prisma generate && npx prisma db seed
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
 
-### Run
+## Deployment
+
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
 ```bash
-# Development mode
-npm run dev
-
-# Production build
-npm run build && npm run start
+$ npm install -g @nestjs/mau
+$ mau deploy
 ```
 
----
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-Quick peek: [raruu-dot-fullstack-batch-2.vercel.app](https://raruu-dot-fullstack-batch-2.vercel.app/). (tidak ada tempat menyimpan gambar)
+## Resources
+
+Check out a few resources that may come in handy when working with NestJS:
+
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+
+## Support
+
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
