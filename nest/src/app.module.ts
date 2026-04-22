@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
-import { ApiQueriesController } from './controllers/queries.controller';
-import { ApiActionsController } from './controllers/actions.controller';
-import { ApiAssetsController } from './controllers/assets.controller';
+import { QueriesController } from './controllers/queries.controller';
+import { ActionsController } from './controllers/actions.controller';
+import { AssetsController } from './controllers/assets.controller';
 import { AppService } from './app.service';
+import { AuthModule } from '@thallesp/nestjs-better-auth';
+import { auth } from './controllers/auth/auth';
 
 @Module({
-  imports: [],
+  imports: [AuthModule.forRoot({ auth })],
   controllers: [
-    ApiQueriesController,
-    ApiActionsController,
-    ApiAssetsController,
+    QueriesController,
+    ActionsController,
+    AssetsController,
   ],
   providers: [AppService],
 })

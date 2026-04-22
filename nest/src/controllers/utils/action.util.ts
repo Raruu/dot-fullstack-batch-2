@@ -1,4 +1,3 @@
-import { ensureAuthorized } from './auth.util';
 import type {
   ActionFn,
   NestRequest,
@@ -53,10 +52,6 @@ export async function runActionRequest(
   fallbackMessage: string,
   files: UploadedFile[] = [],
 ) {
-  if (!(await ensureAuthorized(req, res))) {
-    return;
-  }
-
   try {
     const body = req.body && typeof req.body === 'object' ? req.body : {};
     const formData = toFormData(body as Record<string, unknown>, files);

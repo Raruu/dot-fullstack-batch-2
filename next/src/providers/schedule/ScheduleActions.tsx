@@ -1,5 +1,6 @@
 "use client";
 
+import { fetcherJson } from "@/libs/fetch";
 import {
   UpdateScheduleState,
   CreateScheduleState,
@@ -8,27 +9,11 @@ import {
 import {
   createContext,
   type ReactNode,
-  startTransition,
-  useActionState,
+  useState,
   useCallback,
   useContext,
   useMemo,
 } from "react";
-
-type UpdateScheduleAction = (
-  prevState: UpdateScheduleState,
-  formData: FormData,
-) => Promise<UpdateScheduleState>;
-
-type CreateScheduleAction = (
-  prevState: CreateScheduleState,
-  formData: FormData,
-) => Promise<CreateScheduleState>;
-
-type DeleteScheduleAction = (
-  prevState: DeleteScheduleState,
-  formData: FormData,
-) => Promise<DeleteScheduleState>;
 
 interface ScheduleActionsContext {
   createState: CreateScheduleState;
@@ -37,64 +22,83 @@ interface ScheduleActionsContext {
   isCreatePending: boolean;
   isUpdatePending: boolean;
   isDeletePending: boolean;
-  submitCreateSchedule: (formData: FormData) => void;
-  submitUpdateSchedule: (formData: FormData) => void;
-  submitDeleteSchedule: (formData: FormData) => void;
+  submitCreateSchedule: (formData: FormData) => Promise<void>;
+  submitUpdateSchedule: (formData: FormData) => Promise<void>;
+  submitDeleteSchedule: (formData: FormData) => Promise<void>;
 }
 
 const Context = createContext<ScheduleActionsContext | null>(null);
 
 interface Props {
   children: ReactNode;
-  createScheduleAction: CreateScheduleAction;
-  updateScheduleAction: UpdateScheduleAction;
-  deleteScheduleAction: DeleteScheduleAction;
+  apiUrl: string;
 }
 
-export function ScheduleActionsProvider({
-  children,
-  createScheduleAction,
-  updateScheduleAction,
-  deleteScheduleAction,
-}: Props) {
-  const [createState, dispatchCreate, isCreatePending] = useActionState(
-    createScheduleAction,
-    {},
-  );
-  const [updateState, dispatchUpdate, isUpdatePending] = useActionState(
-    updateScheduleAction,
-    {},
-  );
-  const [deleteState, dispatchDelete, isDeletePending] = useActionState(
-    deleteScheduleAction,
-    {},
-  );
+export function ScheduleActionsProvider({ children, apiUrl }: Props) {
+  const targetUrl = `${apiUrl}/api/actions/schedule`;
+  const [isCreatePending, setIsCreatePending] = useState(false);
+  const [isUpdatePending, setIsUpdatePending] = useState(false);
+  const [isDeletePending, setIsDeletePending] = useState(false);
+
+  const [createState, setCreateState] = useState<CreateScheduleState>({});
+  const [updateState, setUpdateState] = useState<UpdateScheduleState>({});
+  const [deleteState, setDeleteState] = useState<DeleteScheduleState>({});
 
   const submitCreateSchedule = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchCreate(formData);
-      });
+    async (formData: FormData) => {
+      setIsCreatePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "POST", formData);
+        const data: CreateScheduleState = await res.json();
+        setCreateState(data);
+      } catch {
+        setCreateState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsCreatePending(false);
+      }
     },
-    [dispatchCreate],
+    [targetUrl],
   );
 
   const submitUpdateSchedule = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchUpdate(formData);
-      });
+    async (formData: FormData) => {
+      setIsUpdatePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "PUT", formData);
+        const data: UpdateScheduleState = await res.json();
+        setUpdateState(data);
+      } catch {
+        setUpdateState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsUpdatePending(false);
+      }
     },
-    [dispatchUpdate],
+    [targetUrl],
   );
 
   const submitDeleteSchedule = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchDelete(formData);
-      });
+    async (formData: FormData) => {
+      setIsDeletePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "DELETE", formData);
+        const data: DeleteScheduleState = await res.json();
+        setDeleteState(data);
+      } catch {
+        setDeleteState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsDeletePending(false);
+      }
     },
-    [dispatchDelete],
+    [targetUrl],
   );
 
   const value = useMemo(

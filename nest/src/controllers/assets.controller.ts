@@ -2,21 +2,16 @@ import { Controller, Get, Param, Req, Res } from '@nestjs/common';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { PROFILE_STORAGE_DIR } from '@/libs/config';
-import { ensureAuthorized } from './utils/auth.util';
 import type { NestRequest, NestResponse } from '../types/controller';
 
 @Controller('api/serve')
-export class ApiAssetsController {
+export class AssetsController {
   @Get('pfp/:file')
   async getProfileImage(
     @Req() req: NestRequest,
     @Res() res: NestResponse,
     @Param('file') file: string,
   ) {
-    if (!(await ensureAuthorized(req, res))) {
-      return;
-    }
-
     const fileName = path.basename(file);
 
     if (!fileName.toLowerCase().endsWith('.webp')) {

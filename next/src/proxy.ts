@@ -1,35 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { env } from "./libs/env";
+import { getSessionData } from "./libs/auth-session";
 
 const authPages = ["/login", "/register"];
 const protectedPrefixes = ["/app"];
-
-async function getSessionData(request: NextRequest) {
-  const sessionUrl = new URL(`/api/auth/get-session`, env.PUBLIC_APP_URL);
-
-  const fetchHeaders = new Headers(request.headers);
-
-  if (!fetchHeaders.has("x-forwarded-proto")) {
-    fetchHeaders.set("x-forwarded-proto", "https");
-  }
-
-  try {
-    const response = await fetch(sessionUrl, {
-      headers: fetchHeaders,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[Proxy] Auth rejected: ${response.status} - ${errorText}`);
-      return null;
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("[Proxy] Fetch threw a network error:", error);
-    return null;
-  }
-}
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -44,7 +17,9 @@ export async function proxy(request: NextRequest) {
   }
 
   const session = await getSessionData(request);
-  const hasSession = Boolean(session?.user || session?.session);
+  const hasSession = Boolean(
+    session?.user || session?.session || session?.data?.user,
+  );
 
   if (isProtected && !hasSession) {
     return NextResponse.redirect(new URL("/login", request.url));

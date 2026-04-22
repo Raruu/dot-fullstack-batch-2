@@ -2,11 +2,8 @@
 
 import { UseConfirmDialogOptions } from "@/types/dialog";
 import {
-  CreateRoomAction,
   CreateRoomState,
-  DeleteRoomAction,
   DeleteRoomState,
-  UpdateRoomAction,
   UpdateRoomState,
 } from "@/types/rooms/rooms-actions";
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
@@ -14,13 +11,13 @@ import { useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
-  startTransition,
-  useActionState,
+  useState,
   useCallback,
   useContext,
   useEffect,
   useMemo,
 } from "react";
+import { fetcherJson } from "@/libs/fetch";
 
 interface Context {
   confirm: (opts: UseConfirmDialogOptions) => Promise<boolean>;
@@ -31,66 +28,87 @@ interface Context {
   createState: CreateRoomState;
   updateState: UpdateRoomState;
   deleteState: DeleteRoomState;
-  submitCreate: (payload: FormData) => void;
-  submitUpdateById: (payload: FormData) => void;
-  submitDeleteById: (payload: FormData) => void;
+  submitCreate: (payload: FormData) => Promise<void>;
+  submitUpdateById: (payload: FormData) => Promise<void>;
+  submitDeleteById: (payload: FormData) => Promise<void>;
 }
 
 const Context = createContext<Context | null>(null);
 
 interface Props {
   children: ReactNode;
-  createClassAction?: CreateRoomAction;
-  updateRoomAction?: UpdateRoomAction;
-  deleteRoomAction?: DeleteRoomAction;
+  apiUrl: string;
 }
 
-export function RoomActionsProvider({
-  children,
-  createClassAction,
-  updateRoomAction,
-  deleteRoomAction,
-}: Props) {
+export function RoomActionsProvider({ children, apiUrl }: Props) {
+  const targetUrl = `${apiUrl}/api/actions/rooms`;
   const router = useRouter();
   const { confirm, DialogComponent } = useConfirmDialog();
-  const [createState, dispatchCreate, isCreatePending] = useActionState(
-    createClassAction!,
-    {},
-  );
-  const [updateState, dispatchUpdate, isUpdatePending] = useActionState(
-    updateRoomAction!,
-    {},
-  );
-  const [deleteState, dispatchDelete, isDeletePending] = useActionState(
-    deleteRoomAction!,
-    {},
-  );
+
+  const [isCreatePending, setIsCreatePending] = useState(false);
+  const [isUpdatePending, setIsUpdatePending] = useState(false);
+  const [isDeletePending, setIsDeletePending] = useState(false);
+
+  const [createState, setCreateState] = useState<CreateRoomState>({});
+  const [updateState, setUpdateState] = useState<UpdateRoomState>({});
+  const [deleteState, setDeleteState] = useState<DeleteRoomState>({});
 
   const submitCreate = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchCreate(formData);
-      });
+    async (formData: FormData) => {
+      setIsCreatePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "POST", formData);
+        const data: CreateRoomState = await res.json();
+        setCreateState(data);
+      } catch (e) {
+        console.log(e);
+        setCreateState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsCreatePending(false);
+      }
     },
-    [dispatchCreate],
+    [targetUrl],
   );
 
   const submitUpdateById = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchUpdate(formData);
-      });
+    async (formData: FormData) => {
+      setIsUpdatePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "PUT", formData);
+        const data: UpdateRoomState = await res.json();
+        setUpdateState(data);
+      } catch {
+        setUpdateState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsUpdatePending(false);
+      }
     },
-    [dispatchUpdate],
+    [targetUrl],
   );
 
   const submitDeleteById = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchDelete(formData);
-      });
+    async (formData: FormData) => {
+      setIsDeletePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "DELETE", formData);
+        const data: DeleteRoomState = await res.json();
+        setDeleteState(data);
+      } catch {
+        setDeleteState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsDeletePending(false);
+      }
     },
-    [dispatchDelete],
+    [targetUrl],
   );
 
   const showSuccess = useCallback(

@@ -32,7 +32,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthClientProvider baseURL={env.PUBLIC_APP_URL}>
+        <AuthClientProvider baseURL={env.BACKEND_API_URL}>
           <ThemeProvider>
             <AmbientBackground>{children}</AmbientBackground>
           </ThemeProvider>

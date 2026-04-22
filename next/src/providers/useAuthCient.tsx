@@ -1,7 +1,7 @@
 "use client";
 
-import { authClient } from "@/controllers/auth/auth-client";
 import { AuthClient } from "@/types/auth";
+import { createAuthClient } from "better-auth/react";
 import { createContext, useContext, useMemo } from "react";
 
 const AuthClientContext = createContext<AuthClient | null>(null);
@@ -15,7 +15,13 @@ export function AuthClientProvider({
   children,
   baseURL,
 }: AuthClientProviderProps) {
-  const data = useMemo(() => authClient(baseURL), [baseURL]);
+  const data = useMemo(
+    () =>
+      createAuthClient({
+        baseURL,
+      }),
+    [baseURL],
+  );
 
   return (
     <AuthClientContext.Provider value={data}>

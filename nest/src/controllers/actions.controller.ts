@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Body,
   Controller,
@@ -28,13 +27,9 @@ import type {
 } from '../types/controller';
 
 @Controller('api/actions')
-export class ApiActionsController {
+export class ActionsController {
   @Post('rooms')
-  async createRoom(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async createRoom(@Req() req: NestRequest, @Res() res: NestResponse) {
     await runActionRequest(
       req,
       res,
@@ -44,11 +39,7 @@ export class ApiActionsController {
   }
 
   @Put('rooms')
-  async updateRoom(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async updateRoom(@Req() req: NestRequest, @Res() res: NestResponse) {
     await runActionRequest(
       req,
       res,
@@ -58,11 +49,7 @@ export class ApiActionsController {
   }
 
   @Delete('rooms')
-  async deleteRoom(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async deleteRoom(@Req() req: NestRequest, @Res() res: NestResponse) {
     await runActionRequest(
       req,
       res,
@@ -72,11 +59,7 @@ export class ApiActionsController {
   }
 
   @Post('schedule')
-  async createSchedule(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async createSchedule(@Req() req: NestRequest, @Res() res: NestResponse) {
     await runActionRequest(
       req,
       res,
@@ -86,11 +69,7 @@ export class ApiActionsController {
   }
 
   @Put('schedule')
-  async updateSchedule(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async updateSchedule(@Req() req: NestRequest, @Res() res: NestResponse) {
     await runActionRequest(
       req,
       res,
@@ -100,11 +79,7 @@ export class ApiActionsController {
   }
 
   @Delete('schedule')
-  async deleteSchedule(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async deleteSchedule(@Req() req: NestRequest, @Res() res: NestResponse) {
     await runActionRequest(
       req,
       res,
@@ -115,11 +90,7 @@ export class ApiActionsController {
 
   @Post('users')
   @UseInterceptors(AnyFilesInterceptor())
-  async createUser(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async createUser(@Req() req: NestRequest, @Res() res: NestResponse) {
     const files = ((req as NestRequest & { files?: unknown }).files ??
       []) as UploadedFile[];
 
@@ -134,11 +105,7 @@ export class ApiActionsController {
 
   @Put('users')
   @UseInterceptors(AnyFilesInterceptor())
-  async updateUser(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async updateUser(@Req() req: NestRequest, @Res() res: NestResponse) {
     const files = ((req as NestRequest & { files?: unknown }).files ??
       []) as UploadedFile[];
 
@@ -152,11 +119,7 @@ export class ApiActionsController {
   }
 
   @Delete('users')
-  async deleteUser(
-    @Req() req: NestRequest,
-    @Res() res: NestResponse,
-    @Body() _body: unknown,
-  ) {
+  async deleteUser(@Req() req: NestRequest, @Res() res: NestResponse) {
     await runActionRequest(
       req,
       res,

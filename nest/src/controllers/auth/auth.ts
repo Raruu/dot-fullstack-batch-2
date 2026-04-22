@@ -9,6 +9,7 @@ export const auth = betterAuth({
     allowedHosts: ['*.vercel.app'],
     fallback: env.BETTER_AUTH_URL,
   },
+  trustedOrigins: ['http://localhost:3001'],
   plugins: [openAPI()],
   database: prismaAdapter(db, {
     provider: env.DATABASE_DRIVER,

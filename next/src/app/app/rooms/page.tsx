@@ -1,48 +1,16 @@
 import { NavigationTitle } from "@/components/ui/NavigationTitle";
-import { getRoomListData } from "@/models/queries/rooms/get-room-list";
 import { RoomTable } from "@/views/rooms/RoomTable";
 import { RoomListProvider } from "@/providers/rooms/RoomListProvider";
-import { createRoomAction } from "@/controllers/actions/rooms/create";
-import { updateRoomAction } from "@/controllers/actions/rooms/update";
 import { RoomActionsProvider } from "@/providers/rooms/RoomActions";
+import { env } from "@/libs/env";
 
-interface Props {
-  searchParams?: Promise<Record<string, string | string[] | undefined>>;
-}
-
-export default async function Page({ searchParams }: Props) {
-  const resolvedSearchParams = (await searchParams) ?? {};
-
-  const data = await getRoomListData({
-    floor: Array.isArray(resolvedSearchParams.floor)
-      ? resolvedSearchParams.floor[0]
-      : resolvedSearchParams.floor,
-    search: Array.isArray(resolvedSearchParams.search)
-      ? resolvedSearchParams.search[0]
-      : resolvedSearchParams.search,
-    page: Array.isArray(resolvedSearchParams.page)
-      ? resolvedSearchParams.page[0]
-      : resolvedSearchParams.page,
-    pageSize: Array.isArray(resolvedSearchParams.pageSize)
-      ? resolvedSearchParams.pageSize[0]
-      : resolvedSearchParams.pageSize,
-  });
-
-  const bindedCreateClassAction = createRoomAction.bind(null, "/app/rooms");
-  const bindedUpdateRoomAction = updateRoomAction.bind(null, "/app/rooms");
-
+export default async function Page() {
   return (
     <div>
-      <NavigationTitle
-        title="Daftar Ruangan"
-        subtitle={`${data.pagination.totalCount} Ruangan`}
-      />
+      <NavigationTitle title="Daftar Ruangan" />
 
-      <RoomListProvider data={data}>
-        <RoomActionsProvider
-          createClassAction={bindedCreateClassAction}
-          updateRoomAction={bindedUpdateRoomAction}
-        >
+      <RoomListProvider apiUrl={env.BACKEND_API_URL}>
+        <RoomActionsProvider apiUrl={env.BACKEND_API_URL}>
           <div className="flex w-full flex-col gap-8">
             <RoomTable />
           </div>

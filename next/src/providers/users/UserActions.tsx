@@ -2,11 +2,8 @@
 
 import { UseConfirmDialogOptions } from "@/types/dialog";
 import {
-  CreateUserAction,
   CreateUserState,
-  DeleteUserAction,
   DeleteUserState,
-  UpdateUserAction,
   UpdateUserState,
 } from "@/types/users/users-actions";
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
@@ -14,8 +11,7 @@ import { useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
-  startTransition,
-  useActionState,
+  useState,
   useCallback,
   useContext,
   useEffect,
@@ -23,6 +19,7 @@ import {
   useRef,
 } from "react";
 import { useAuthClient } from "../useAuthCient";
+import { fetcherJson } from "@/libs/fetch";
 
 interface Context {
   confirm: (opts: UseConfirmDialogOptions) => Promise<boolean>;
@@ -33,66 +30,90 @@ interface Context {
   createState: CreateUserState;
   updateState: UpdateUserState;
   deleteState: DeleteUserState;
-  submitCreate: (payload: FormData) => void;
-  submitUpdateById: (payload: FormData) => void;
-  submitDeleteById: (payload: FormData) => void;
+  submitCreate: (payload: FormData) => Promise<void>;
+  submitUpdateById: (payload: FormData) => Promise<void>;
+  submitDeleteById: (payload: FormData) => Promise<void>;
 }
 
 const Context = createContext<Context | null>(null);
 
 interface Props {
   children: ReactNode;
-  createUserAction: CreateUserAction;
-  updateUserAction: UpdateUserAction;
-  deleteUserAction: DeleteUserAction;
+  apiUrl: string;
 }
 
-export function UserActionsProvider({
-  children,
-  createUserAction,
-  updateUserAction,
-  deleteUserAction,
-}: Props) {
+export function UserActionsProvider({ children, apiUrl }: Props) {
+  const targetUrl = `${apiUrl}/api/actions/users`;
   const router = useRouter();
   const { confirm, DialogComponent } = useConfirmDialog();
-  const [createState, dispatchCreate, isCreatePending] = useActionState(
-    createUserAction!,
-    {},
-  );
-  const [updateState, dispatchUpdate, isUpdatePending] = useActionState(
-    updateUserAction!,
-    {},
-  );
-  const [deleteState, dispatchDelete, isDeletePending] = useActionState(
-    deleteUserAction!,
-    {},
-  );
+
+  const [isCreatePending, setIsCreatePending] = useState(false);
+  const [isUpdatePending, setIsUpdatePending] = useState(false);
+  const [isDeletePending, setIsDeletePending] = useState(false);
+
+  const [createState, setCreateState] = useState<CreateUserState>({});
+  const [updateState, setUpdateState] = useState<UpdateUserState>({});
+  const [deleteState, setDeleteState] = useState<DeleteUserState>({});
+
+  const { useSession } = useAuthClient();
+  const session = useSession().data;
+  const userRef = useRef(session?.user);
 
   const submitCreate = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchCreate(formData);
-      });
+    async (formData: FormData) => {
+      setIsCreatePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "POST", formData);
+        const data: CreateUserState = await res.json();
+        setCreateState(data);
+      } catch {
+        setCreateState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsCreatePending(false);
+      }
     },
-    [dispatchCreate],
+    [targetUrl],
   );
 
   const submitUpdateById = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchUpdate(formData);
-      });
+    async (formData: FormData) => {
+      setIsUpdatePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "PUT", formData);
+        const data: UpdateUserState = await res.json();
+        setUpdateState(data);
+      } catch {
+        setUpdateState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsUpdatePending(false);
+      }
     },
-    [dispatchUpdate],
+    [targetUrl],
   );
 
   const submitDeleteById = useCallback(
-    (formData: FormData) => {
-      startTransition(() => {
-        dispatchDelete(formData);
-      });
+    async (formData: FormData) => {
+      setIsDeletePending(true);
+      try {
+        const res = await fetcherJson(targetUrl, "DELETE", formData);
+        const data: DeleteUserState = await res.json();
+        setDeleteState(data);
+      } catch {
+        setDeleteState({
+          success: false,
+          message: "Gagal mengirim permintaan",
+        });
+      } finally {
+        setIsDeletePending(false);
+      }
     },
-    [dispatchDelete],
+    [targetUrl],
   );
 
   const showSuccess = useCallback(
@@ -135,10 +156,6 @@ export function UserActionsProvider({
     createState.success,
     showSuccess,
   ]);
-
-  const { useSession } = useAuthClient();
-  const user = useSession().data?.user;
-  const userRef = useRef(user);
 
   useEffect(() => {
     if (typeof updateState.success !== "boolean") {

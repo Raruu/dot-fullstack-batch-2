@@ -9,7 +9,9 @@ import {
   useTransition,
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import useSWR from "swr";
 import { RoomListData, RoomListFilters } from "@/types/rooms/rooms-list";
+import { swrFetcher } from "@/libs/fetch";
 
 interface RoomListContextValue {
   rows: RoomListData["rows"];
@@ -17,6 +19,8 @@ interface RoomListContextValue {
   filters: RoomListFilters;
   paginationState: RoomListData["pagination"];
   isPaginationPending: boolean;
+  isLoading: boolean;
+  isError: boolean;
   changePage: (nextPage: number) => void;
   changePageSize: (nextSize: number) => void;
   updateFilters: (updates: Record<string, string | null>) => void;
@@ -25,16 +29,28 @@ interface RoomListContextValue {
 const RoomListContext = createContext<RoomListContextValue | null>(null);
 
 interface Props {
-  data: RoomListData;
   children: ReactNode;
+  apiUrl: string;
 }
 
-export function RoomListProvider({ data, children }: Props) {
+export function RoomListProvider({ children, apiUrl }: Props) {
+  const targetUrl = `${apiUrl}/api/queries/rooms`;
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const [isPaginationPending, startPaginationTransition] = useTransition();
+
+  const queryString = useMemo(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    return params.toString();
+  }, [searchParams]);
+
+  const { data, isLoading, error } = useSWR<RoomListData>(
+    `${targetUrl}${queryString ? `?${queryString}` : ""}`,
+    swrFetcher,
+  );
 
   const updateFilters = useCallback(
     (updates: Record<string, string | null>) => {
@@ -74,11 +90,18 @@ export function RoomListProvider({ data, children }: Props) {
 
   const value = useMemo<RoomListContextValue>(
     () => ({
-      rows: data.rows,
-      floors: data.floors,
-      filters: data.filters,
-      paginationState: data.pagination,
+      rows: data?.rows ?? [],
+      floors: data?.floors ?? [],
+      filters: data?.filters ?? { floor: "all", search: "" },
+      paginationState: data?.pagination ?? {
+        page: 1,
+        pageSize: 10,
+        totalPages: 1,
+        totalCount: 0,
+      },
       isPaginationPending,
+      isLoading,
+      isError: !!error,
       changePage,
       changePageSize,
       updateFilters,
@@ -86,11 +109,13 @@ export function RoomListProvider({ data, children }: Props) {
     [
       changePage,
       changePageSize,
-      data.filters,
-      data.floors,
-      data.pagination,
-      data.rows,
+      data?.filters,
+      data?.floors,
+      data?.pagination,
+      data?.rows,
       isPaginationPending,
+      isLoading,
+      error,
       updateFilters,
     ],
   );
