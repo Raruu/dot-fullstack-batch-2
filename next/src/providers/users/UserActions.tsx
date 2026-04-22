@@ -20,6 +20,7 @@ import {
 } from "react";
 import { useAuthClient } from "../useAuthCient";
 import { fetcherJson } from "@/libs/fetch";
+import { useUserList } from "./UserListProvider";
 
 interface Context {
   confirm: (opts: UseConfirmDialogOptions) => Promise<boolean>;
@@ -45,6 +46,7 @@ interface Props {
 export function UserActionsProvider({ children, apiUrl }: Props) {
   const targetUrl = `${apiUrl}/api/actions/users`;
   const router = useRouter();
+  const { mutate } = useUserList();
   const { confirm, DialogComponent } = useConfirmDialog();
 
   const [isCreatePending, setIsCreatePending] = useState(false);
@@ -122,6 +124,7 @@ export function UserActionsProvider({ children, apiUrl }: Props) {
       message?: string,
       pushPath?: string | (() => void),
     ) => {
+      mutate();
       await confirm({
         title: success ? "Berhasil" : "Gagal",
         message: message ?? (success ? "Operasi berhasil" : "Operasi gagal"),
@@ -140,7 +143,7 @@ export function UserActionsProvider({ children, apiUrl }: Props) {
         router.refresh();
       }
     },
-    [confirm, router],
+    [confirm, mutate, router],
   );
 
   useEffect(() => {

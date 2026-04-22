@@ -9,11 +9,12 @@ import {
   useTransition,
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 import { RoomListData, RoomListFilters } from "@/types/rooms/rooms-list";
 import { swrFetcher } from "@/libs/fetch";
+import { LoadingScreen } from "../../components/ui/LoadingScreen";
 
-interface RoomListContextValue {
+export interface RoomListContextValue {
   rows: RoomListData["rows"];
   floors: number[];
   filters: RoomListFilters;
@@ -24,6 +25,7 @@ interface RoomListContextValue {
   changePage: (nextPage: number) => void;
   changePageSize: (nextSize: number) => void;
   updateFilters: (updates: Record<string, string | null>) => void;
+  mutate: KeyedMutator<RoomListData>;
 }
 
 const RoomListContext = createContext<RoomListContextValue | null>(null);
@@ -47,7 +49,7 @@ export function RoomListProvider({ children, apiUrl }: Props) {
     return params.toString();
   }, [searchParams]);
 
-  const { data, isLoading, error } = useSWR<RoomListData>(
+  const { data, isLoading, error, mutate } = useSWR<RoomListData>(
     `${targetUrl}${queryString ? `?${queryString}` : ""}`,
     swrFetcher,
   );
@@ -105,20 +107,31 @@ export function RoomListProvider({ children, apiUrl }: Props) {
       changePage,
       changePageSize,
       updateFilters,
+      mutate,
     }),
     [
-      changePage,
-      changePageSize,
-      data?.filters,
-      data?.floors,
-      data?.pagination,
       data?.rows,
+      data?.floors,
+      data?.filters,
+      data?.pagination,
       isPaginationPending,
       isLoading,
       error,
+      changePage,
+      changePageSize,
       updateFilters,
+      mutate,
     ],
   );
+
+  if (isLoading) {
+    return (
+      <LoadingScreen
+        title="Memuat daftar ruangan"
+        description="Data ruangan sedang disiapkan."
+      />
+    );
+  }
 
   return (
     <RoomListContext.Provider value={value}>

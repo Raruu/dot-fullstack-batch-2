@@ -14,6 +14,7 @@ import {
   useContext,
   useMemo,
 } from "react";
+import { useRoomDetail } from "../rooms/RoomDetailProvider";
 
 interface ScheduleActionsContext {
   createState: CreateScheduleState;
@@ -36,6 +37,9 @@ interface Props {
 
 export function ScheduleActionsProvider({ children, apiUrl }: Props) {
   const targetUrl = `${apiUrl}/api/actions/schedule`;
+
+  const { mutate } = useRoomDetail();
+
   const [isCreatePending, setIsCreatePending] = useState(false);
   const [isUpdatePending, setIsUpdatePending] = useState(false);
   const [isDeletePending, setIsDeletePending] = useState(false);
@@ -57,10 +61,11 @@ export function ScheduleActionsProvider({ children, apiUrl }: Props) {
           message: "Gagal mengirim permintaan",
         });
       } finally {
+        mutate();
         setIsCreatePending(false);
       }
     },
-    [targetUrl],
+    [mutate, targetUrl],
   );
 
   const submitUpdateSchedule = useCallback(
@@ -76,10 +81,11 @@ export function ScheduleActionsProvider({ children, apiUrl }: Props) {
           message: "Gagal mengirim permintaan",
         });
       } finally {
+        mutate();
         setIsUpdatePending(false);
       }
     },
-    [targetUrl],
+    [mutate, targetUrl],
   );
 
   const submitDeleteSchedule = useCallback(
@@ -95,10 +101,11 @@ export function ScheduleActionsProvider({ children, apiUrl }: Props) {
           message: "Gagal mengirim permintaan",
         });
       } finally {
+        mutate();
         setIsDeletePending(false);
       }
     },
-    [targetUrl],
+    [mutate, targetUrl],
   );
 
   const value = useMemo(

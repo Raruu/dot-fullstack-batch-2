@@ -26,7 +26,18 @@ export async function fetcherJson(
     headers.set("Content-Type", "application/json");
   }
 
-  const payload = Object.fromEntries(formData.entries());
+  const payload: Record<string, unknown> = {};
+  const uniqueKeys = new Set(formData.keys());
+
+  for (const key of uniqueKeys) {
+    const values = formData.getAll(key);
+
+    if (key === "slotNumbers") {
+      payload[key] = values;
+    } else {
+      payload[key] = values.length === 1 ? values[0] : values;
+    }
+  }
 
   const res = await fetch(url, {
     ...options,

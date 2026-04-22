@@ -38,11 +38,15 @@ const Context = createContext<Context | null>(null);
 interface Props {
   children: ReactNode;
   apiUrl: string;
+  useData: () => {
+    mutate: () => void;
+  };
 }
 
-export function RoomActionsProvider({ children, apiUrl }: Props) {
+export function RoomActionsProvider({ children, apiUrl, useData }: Props) {
   const targetUrl = `${apiUrl}/api/actions/rooms`;
   const router = useRouter();
+  const { mutate } = useData();
   const { confirm, DialogComponent } = useConfirmDialog();
 
   const [isCreatePending, setIsCreatePending] = useState(false);
@@ -60,8 +64,7 @@ export function RoomActionsProvider({ children, apiUrl }: Props) {
         const res = await fetcherJson(targetUrl, "POST", formData);
         const data: CreateRoomState = await res.json();
         setCreateState(data);
-      } catch (e) {
-        console.log(e);
+      } catch {
         setCreateState({
           success: false,
           message: "Gagal mengirim permintaan",
@@ -113,6 +116,7 @@ export function RoomActionsProvider({ children, apiUrl }: Props) {
 
   const showSuccess = useCallback(
     async (success: boolean, message?: string, pushPath?: string) => {
+      mutate();
       await confirm({
         title: success ? "Berhasil" : "Gagal",
         message: message ?? (success ? "Operasi berhasil" : "Operasi gagal"),
@@ -129,7 +133,7 @@ export function RoomActionsProvider({ children, apiUrl }: Props) {
         router.refresh();
       }
     },
-    [confirm, router],
+    [confirm, mutate, router],
   );
 
   useEffect(() => {

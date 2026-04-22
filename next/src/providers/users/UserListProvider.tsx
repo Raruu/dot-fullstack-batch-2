@@ -10,8 +10,9 @@ import {
   useTransition,
 } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useSWR from "swr";
+import useSWR, { KeyedMutator } from "swr";
 import { swrFetcher } from "@/libs/fetch";
+import { LoadingScreen } from "../../components/ui/LoadingScreen";
 
 interface UserListContextValue {
   rows: UserListData["rows"];
@@ -23,6 +24,7 @@ interface UserListContextValue {
   changePage: (nextPage: number) => void;
   changePageSize: (nextSize: number) => void;
   updateFilters: (updates: Record<string, string | null>) => void;
+  mutate: KeyedMutator<UserListData>;
 }
 
 const UserListContext = createContext<UserListContextValue | null>(null);
@@ -45,7 +47,7 @@ export function UserListProvider({ children, apiUrl }: Props) {
     return params.toString();
   }, [searchParams]);
 
-  const { data, isLoading, error } = useSWR<UserListData>(
+  const { data, isLoading, error, mutate } = useSWR<UserListData>(
     `${targetUrl}${queryString ? `?${queryString}` : ""}`,
     swrFetcher,
   );
@@ -102,19 +104,30 @@ export function UserListProvider({ children, apiUrl }: Props) {
       changePage,
       changePageSize,
       updateFilters,
+      mutate,
     }),
     [
-      changePage,
-      changePageSize,
+      data?.rows,
       data?.filters,
       data?.pagination,
-      data?.rows,
       isPaginationPending,
       isLoading,
       error,
+      changePage,
+      changePageSize,
       updateFilters,
+      mutate,
     ],
   );
+
+  if (isLoading) {
+    return (
+      <LoadingScreen
+        title="Memuat daftar user"
+        description="Data user sedang disiapkan."
+      />
+    );
+  }
 
   return (
     <UserListContext.Provider value={value}>

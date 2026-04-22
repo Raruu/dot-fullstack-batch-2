@@ -11,8 +11,9 @@ export function parsePositiveInt(value: string | undefined, fallback: number) {
 }
 
 export const toClockString = (value: Date) => {
-  const hours = String(value.getUTCHours()).padStart(2, "0");
-  const minutes = String(value.getUTCMinutes()).padStart(2, "0");
+  const parsedDate = new Date(value);
+  const hours = String(parsedDate.getUTCHours()).padStart(2, "0");
+  const minutes = String(parsedDate.getUTCMinutes()).padStart(2, "0");
 
   return `${hours}:${minutes}`;
 };
