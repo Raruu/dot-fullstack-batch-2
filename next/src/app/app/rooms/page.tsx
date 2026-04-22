@@ -6,19 +6,25 @@ import {
 } from "@/providers/rooms/RoomListProvider";
 import { RoomActionsProvider } from "@/providers/rooms/RoomActions";
 import { env } from "@/libs/env";
+import { Suspense } from "react";
 
 export default async function Page() {
   return (
     <div>
       <NavigationTitle title="Daftar Ruangan" />
 
-      <RoomListProvider apiUrl={env.BACKEND_API_URL}>
-        <RoomActionsProvider apiUrl={env.BACKEND_API_URL} useData={useRoomList}>
-          <div className="flex w-full flex-col gap-8">
-            <RoomTable />
-          </div>
-        </RoomActionsProvider>
-      </RoomListProvider>
+      <Suspense fallback={null}>
+        <RoomListProvider apiUrl={env.BACKEND_API_URL}>
+          <RoomActionsProvider
+            apiUrl={env.BACKEND_API_URL}
+            useData={useRoomList}
+          >
+            <div className="flex w-full flex-col gap-8">
+              <RoomTable />
+            </div>
+          </RoomActionsProvider>
+        </RoomListProvider>
+      </Suspense>
     </div>
   );
 }
